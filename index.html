@@ -3,24 +3,22 @@
 <html lang="pt-BR">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="theme-color" content="#090909">
   <title>AOI IA</title>
 
   <style>
     :root {
       --bg: #090909;
-      --panel: #111111;
-      --panel2: #191919;
+      --panel: #141414;
+      --panel2: #1d1d1d;
       --red: #ff2020;
       --text: #f5f5f5;
       --muted: #a4a4a4;
-      --border: #292929;
+      --border: #303030;
     }
 
-    * {
-      box-sizing: border-box;
-    }
+    * { box-sizing: border-box; }
 
     body {
       margin: 0;
@@ -30,40 +28,28 @@
       font-family: Arial, Helvetica, sans-serif;
     }
 
-    button, input, textarea {
-      font: inherit;
-    }
-
-    button {
-      cursor: pointer;
-    }
-
-    .app {
-      min-height: 100vh;
-      display: flex;
-      flex-direction: column;
-    }
+    button, input, select, textarea { font: inherit; }
+    button { cursor: pointer; }
 
     header {
       position: sticky;
       top: 0;
       z-index: 5;
       display: flex;
-      align-items: center;
       justify-content: space-between;
+      align-items: center;
       gap: 12px;
-      padding: 15px 22px;
-      background: rgba(9, 9, 9, .96);
+      padding: 14px 20px;
+      background: #090909f5;
       border-bottom: 1px solid var(--border);
     }
 
     .brand {
       display: flex;
       align-items: center;
-      gap: 12px;
+      gap: 11px;
+      font-size: 20px;
       font-weight: 800;
-      font-size: 21px;
-      letter-spacing: 1px;
     }
 
     .logo {
@@ -71,73 +57,68 @@
       place-items: center;
       width: 42px;
       height: 42px;
-      background: var(--red);
       color: white;
+      background: var(--red);
       border-radius: 12px;
-      font-size: 17px;
-      box-shadow: 0 0 18px #ff202044;
+      box-shadow: 0 0 20px #ff202033;
     }
 
     .brand small {
       display: block;
-      margin-top: 3px;
       color: var(--muted);
       font-size: 11px;
-      font-weight: 400;
-      letter-spacing: 0;
+      font-weight: normal;
+      margin-top: 3px;
     }
 
-    .header-actions {
+    .actions {
       display: flex;
+      flex-wrap: wrap;
       gap: 8px;
+      align-items: center;
+      justify-content: flex-end;
     }
 
-    .secondary, .icon-button {
+    .btn, .icon-btn {
+      padding: 10px 12px;
+      color: var(--text);
       background: var(--panel2);
       border: 1px solid var(--border);
-      color: var(--text);
-      padding: 10px 13px;
       border-radius: 10px;
     }
 
-    .secondary:hover, .icon-button:hover {
+    .btn:hover, .icon-btn:hover {
       border-color: var(--red);
     }
 
     .led {
       height: 3px;
-      width: 100%;
       background: linear-gradient(
-        90deg,
-        transparent,
-        var(--red),
-        #fff,
-        var(--red),
-        transparent
+        90deg, transparent, #ff2020, white, #ff2020, transparent
       );
       background-size: 200% 100%;
-      animation: ledMove 4s linear infinite;
-      box-shadow: 0 0 12px #ff2020a0;
+      animation: led 4s linear infinite;
+      box-shadow: 0 0 12px #ff202088;
     }
 
-    @keyframes ledMove {
+    @keyframes led {
       from { background-position: 200% 0; }
       to { background-position: -200% 0; }
     }
 
     main {
-      width: 100%;
-      max-width: 950px;
-      margin: 0 auto;
-      padding: 25px 18px 18px;
-      flex: 1;
       display: flex;
       flex-direction: column;
+      width: 100%;
+      max-width: 950px;
+      min-height: calc(100vh - 105px);
+      margin: auto;
+      padding: 22px 16px 12px;
     }
 
     .welcome {
       text-align: center;
-      padding: 50px 12px 35px;
+      padding: 50px 10px 28px;
     }
 
     .welcome-logo {
@@ -145,167 +126,150 @@
       place-items: center;
       width: 72px;
       height: 72px;
-      margin: 0 auto 20px;
-      background: linear-gradient(135deg, #ff3030, #9d0000);
+      margin: auto auto 20px;
       border-radius: 22px;
-      font-size: 27px;
+      background: linear-gradient(135deg, #ff3030, #920000);
+      font-size: 25px;
       font-weight: 900;
-      box-shadow: 0 0 40px #ff202028;
+      box-shadow: 0 0 38px #ff202025;
     }
 
     .welcome h1 {
-      font-size: clamp(28px, 5vw, 42px);
+      font-size: clamp(27px, 5vw, 42px);
       margin: 0 0 12px;
     }
 
-    .welcome h1 span {
-      color: var(--red);
-    }
+    .red { color: var(--red); }
 
     .welcome p {
+      max-width: 530px;
+      margin: auto;
       color: var(--muted);
-      line-height: 1.6;
-      margin: 0 auto;
-      max-width: 500px;
+      line-height: 1.65;
     }
 
     .suggestions {
       display: grid;
       grid-template-columns: repeat(2, minmax(0, 1fr));
       gap: 10px;
-      margin: 0 auto 25px;
       width: 100%;
       max-width: 650px;
+      margin: 0 auto 25px;
     }
 
     .suggestion {
       padding: 15px;
       text-align: left;
-      background: var(--panel);
       color: var(--text);
+      background: var(--panel);
       border: 1px solid var(--border);
       border-radius: 12px;
-      line-height: 1.4;
+      line-height: 1.5;
     }
 
     .suggestion:hover {
       border-color: var(--red);
-      background: #171111;
     }
 
     #chat {
       display: flex;
       flex-direction: column;
       gap: 22px;
-      padding-bottom: 20px;
+      padding-bottom: 18px;
     }
 
     .message {
       display: flex;
-      gap: 11px;
       align-items: flex-start;
-      max-width: 100%;
+      gap: 10px;
     }
 
-    .message.user {
-      flex-direction: row-reverse;
-    }
+    .message.user { flex-direction: row-reverse; }
 
     .avatar {
-      width: 34px;
-      height: 34px;
-      min-width: 34px;
       display: grid;
       place-items: center;
+      width: 35px;
+      height: 35px;
+      min-width: 35px;
+      border-radius: 10px;
       background: var(--red);
       color: white;
-      border-radius: 10px;
-      font-size: 12px;
-      font-weight: 800;
+      font-size: 11px;
+      font-weight: bold;
     }
 
-    .user .avatar {
-      background: #292929;
-    }
+    .user .avatar { background: #333; }
 
     .message-content {
-      max-width: calc(100% - 45px);
       min-width: 0;
+      max-width: calc(100% - 45px);
     }
 
     .message-name {
-      font-size: 12px;
       color: var(--muted);
+      font-size: 12px;
       margin: 2px 0 7px;
     }
 
     .bubble {
       padding: 13px 15px;
       border: 1px solid var(--border);
-      border-radius: 4px 14px 14px 14px;
+      border-radius: 4px 14px 14px;
       background: var(--panel);
-      line-height: 1.65;
-      overflow-wrap: anywhere;
       white-space: pre-wrap;
+      overflow-wrap: anywhere;
+      line-height: 1.65;
     }
 
     .user .bubble {
+      border-color: #512020;
       background: #251010;
-      border-color: #482020;
       border-radius: 14px 4px 14px 14px;
     }
 
-    .message-tools {
-      margin-top: 8px;
-    }
-
-    .copy-button {
+    .copy-btn {
+      padding: 7px 0 0;
       border: 0;
-      background: transparent;
       color: var(--muted);
-      padding: 4px 0;
+      background: transparent;
       font-size: 12px;
     }
 
-    .copy-button:hover {
-      color: white;
-    }
+    .copy-btn:hover { color: white; }
 
     .typing {
+      margin: 8px 0;
       color: var(--muted);
       font-size: 13px;
-      padding: 8px 0;
     }
 
     .composer-area {
       position: sticky;
       bottom: 0;
-      background: linear-gradient(transparent, var(--bg) 18%);
-      padding: 18px 0 12px;
       margin-top: auto;
+      padding: 18px 0 10px;
+      background: linear-gradient(transparent, var(--bg) 20%);
     }
 
     .composer {
       display: flex;
       align-items: flex-end;
       gap: 10px;
-      background: var(--panel);
-      border: 1px solid #383838;
-      border-radius: 17px;
       padding: 10px;
-      box-shadow: 0 10px 35px #0007;
+      background: var(--panel);
+      border: 1px solid #393939;
+      border-radius: 17px;
     }
 
-    .composer:focus-within {
-      border-color: #a52a2a;
-    }
+    .composer:focus-within { border-color: #a52a2a; }
 
     #prompt {
       flex: 1;
       min-width: 0;
-      resize: none;
-      max-height: 180px;
       min-height: 42px;
+      max-height: 180px;
+      resize: none;
       padding: 11px 8px;
       color: var(--text);
       background: transparent;
@@ -314,95 +278,81 @@
       line-height: 1.5;
     }
 
-    #prompt::placeholder {
-      color: #858585;
-    }
+    #prompt::placeholder { color: #888; }
 
     #send {
-      width: 43px;
-      height: 43px;
+      width: 44px;
+      height: 44px;
       flex-shrink: 0;
       border: 0;
       border-radius: 12px;
       color: white;
       background: var(--red);
+      font-weight: bold;
       font-size: 19px;
-      font-weight: 800;
     }
 
-    #send:hover {
-      background: #d90000;
-    }
+    #send:disabled { opacity: .5; cursor: not-allowed; }
 
-    #send:disabled {
-      opacity: .45;
-      cursor: not-allowed;
-    }
-
-    .hint, footer {
-      text-align: center;
+    .hint {
       color: #777;
       font-size: 11px;
       line-height: 1.6;
-    }
-
-    .hint {
+      text-align: center;
       margin-top: 10px;
     }
 
     footer {
       padding: 15px;
       border-top: 1px solid var(--border);
+      text-align: center;
+      color: #777;
+      font-size: 11px;
     }
 
-    footer strong {
-      color: var(--red);
-    }
+    footer strong { color: var(--red); }
 
     .notice {
       display: none;
-      margin: 0 0 15px;
+      margin-bottom: 14px;
       padding: 12px 14px;
+      color: #ffd2d2;
+      background: #260e0e;
       border: 1px solid #673030;
       border-radius: 10px;
-      color: #ffd1d1;
-      background: #260e0e;
-      line-height: 1.5;
       font-size: 13px;
+      line-height: 1.5;
+      overflow-wrap: anywhere;
     }
 
-    .notice.show {
-      display: block;
-    }
+    .notice.show { display: block; }
 
     .modal-backdrop {
       position: fixed;
       inset: 0;
       z-index: 20;
       display: none;
-      align-items: center;
       justify-content: center;
-      padding: 18px;
-      background: #000b;
+      align-items: center;
+      padding: 16px;
+      background: #000c;
     }
 
-    .modal-backdrop.open {
-      display: flex;
-    }
+    .modal-backdrop.open { display: flex; }
 
     .modal {
       width: 100%;
-      max-width: 460px;
-      padding: 23px;
-      background: #121212;
-      border: 1px solid #383838;
+      max-width: 490px;
+      max-height: 90vh;
+      overflow-y: auto;
+      padding: 22px;
+      border: 1px solid #393939;
       border-radius: 18px;
-      box-shadow: 0 20px 70px #000a;
+      background: #121212;
+      box-shadow: 0 20px 70px #0009;
     }
 
-    .modal h2 {
-      margin: 0 0 9px;
-    }
+    .modal h2 { margin: 0 0 10px; }
 
     .modal p {
       color: var(--muted);
@@ -412,26 +362,29 @@
 
     .modal label {
       display: block;
-      margin: 18px 0 7px;
+      margin: 17px 0 7px;
       font-size: 13px;
+      font-weight: bold;
     }
 
-    .modal input {
+    .modal input, .modal select {
+      display: block;
       width: 100%;
       padding: 12px;
-      border-radius: 10px;
-      background: #090909;
       color: white;
-      border: 1px solid #383838;
-      outline: 0;
+      background: #090909;
+      border: 1px solid #393939;
+      border-radius: 10px;
+      outline: none;
     }
 
-    .modal input:focus {
+    .modal input:focus, .modal select:focus {
       border-color: var(--red);
     }
 
     .modal-actions {
       display: flex;
+      flex-wrap: wrap;
       justify-content: flex-end;
       gap: 8px;
       margin-top: 20px;
@@ -440,161 +393,119 @@
     .primary {
       padding: 11px 15px;
       color: white;
-      background: var(--red);
       border: 0;
       border-radius: 10px;
+      background: var(--red);
     }
 
-    .danger {
-      color: #ffb6b6;
-      border-color: #613030;
-    }
+    .danger { color: #ffaaaa; }
 
     @media (max-width: 560px) {
-      header {
-        padding: 12px;
-      }
-
-      .brand {
-        font-size: 17px;
-        gap: 8px;
-      }
-
-      .logo {
-        width: 36px;
-        height: 36px;
-      }
-
-      .secondary {
-        padding: 9px 10px;
-        font-size: 12px;
-      }
-
-      main {
-        padding: 12px;
-      }
-
-      .welcome {
-        padding: 40px 5px 28px;
-      }
-
-      .suggestions {
-        grid-template-columns: 1fr;
-      }
+      header { padding: 12px; }
+      .brand { gap: 8px; font-size: 17px; }
+      .logo { width: 36px; height: 36px; }
+      .btn { padding: 9px; font-size: 12px; }
+      main { padding: 12px; }
+      .welcome { padding: 38px 5px 26px; }
+      .suggestions { grid-template-columns: 1fr; }
     }
   </style>
 </head>
 
 <body>
-  <div class="app">
-    <header>
-      <div class="brand">
-        <div class="logo">AOI</div>
-        <div>
-          AOI IA
-          <small>Seu assistente inteligente</small>
-        </div>
+  <header>
+    <div class="brand">
+      <div class="logo">AOI</div>
+      <div>
+        AOI IA
+        <small>Seu assistente inteligente</small>
       </div>
+    </div>
 
-      <div class="header-actions">
-        <button class="secondary" id="newChat" type="button">
-          + Nova conversa
-        </button>
-        <button class="icon-button" id="openSettings"
-          type="button" title="Configurações" aria-label="Configurações">
-          ⚙
-        </button>
-      </div>
-    </header>
+    <div class="actions">
+      <button class="btn" id="newChat" type="button">+ Nova conversa</button>
+      <button class="btn" id="openSettings" type="button">⚙ Config</button>
+    </div>
+  </header>
 
-    <div class="led"></div>
+  <div class="led"></div>
 
-    <main>
-      <div class="notice" id="notice" role="status"></div>
+  <main>
+    <div id="notice" class="notice" role="status"></div>
 
-      <section class="welcome" id="welcome">
-        <div class="welcome-logo">AOI</div>
-        <h1>Olá! Eu sou a <span>AOI IA.</span></h1>
-        <p>
-          Pergunte, aprenda, programe e crie ideias.
-          Escreva sua mensagem abaixo para começar.
-        </p>
-      </section>
-
-      <section class="suggestions" id="suggestions">
-        <button class="suggestion" type="button"
-          data-prompt="Me ajude a criar um jogo no Roblox Studio.">
-          🎮 Me ajude com Roblox Studio
-        </button>
-        <button class="suggestion" type="button"
-          data-prompt="Me ensine HTML, CSS e JavaScript desde o começo.">
-          💻 Aprender programação
-        </button>
-        <button class="suggestion" type="button"
-          data-prompt="Me dê ideias para vídeos de games no YouTube.">
-          🎬 Ideias para vídeos
-        </button>
-        <button class="suggestion" type="button"
-          data-prompt="Explique um assunto difícil de forma simples, com exemplos.">
-          💡 Aprender algo novo
-        </button>
-      </section>
-
-      <section id="chat" aria-live="polite"></section>
-
-      <div class="typing" id="typing" hidden>
-        AOI IA está pensando...
-      </div>
-
-      <section class="composer-area">
-        <form class="composer" id="chatForm">
-          <textarea id="prompt" rows="1"
-            placeholder="Escreva sua mensagem para a AOI IA..."
-            aria-label="Sua mensagem"></textarea>
-          <button id="send" type="submit" title="Enviar mensagem"
-            aria-label="Enviar mensagem">➤</button>
-        </form>
-        <div class="hint">
-          A AOI IA pode cometer erros. Confira informações importantes.
-        </div>
-      </section>
-    </main>
-
-    <footer>
-      Feito para <strong>AOIofc1</strong> · AOI IA
-    </footer>
-  </div>
-
-  <div class="modal-backdrop" id="settingsModal" role="dialog"
-    aria-modal="true" aria-labelledby="settingsTitle">
-    <div class="modal">
-      <h2 id="settingsTitle">⚙ Configurações</h2>
+    <section class="welcome" id="welcome">
+      <div class="welcome-logo">AOI</div>
+      <h1>Olá! Eu sou a <span class="red">AOI IA.</span></h1>
       <p>
-        Configure sua chave da API Gemini para ativar o chat.
-        A chave é guardada neste navegador.
+        Pergunte, aprenda, programe e crie ideias.
+        Escreva sua mensagem abaixo para começar.
       </p>
+    </section>
+
+    <section class="suggestions" id="suggestions">
+      <button class="suggestion" data-prompt="Me ajude a criar um jogo no Roblox Studio." type="button">
+        🎮 Me ajude com Roblox Studio
+      </button>
+      <button class="suggestion" data-prompt="Me ensine HTML, CSS e JavaScript desde o começo." type="button">
+        💻 Aprender programação
+      </button>
+      <button class="suggestion" data-prompt="Me dê ideias para vídeos de games no YouTube." type="button">
+        🎬 Ideias para vídeos
+      </button>
+      <button class="suggestion" data-prompt="Explique um assunto difícil de forma simples, com exemplos." type="button">
+        💡 Aprender algo novo
+      </button>
+    </section>
+
+    <section id="chat" aria-live="polite"></section>
+    <div id="typing" class="typing" hidden>AOI IA está pensando...</div>
+
+    <section class="composer-area">
+      <form id="chatForm" class="composer">
+        <textarea id="prompt" rows="1"
+          placeholder="Escreva sua mensagem para a AOI IA..."
+          aria-label="Sua mensagem"></textarea>
+        <button id="send" type="submit" aria-label="Enviar mensagem">➤</button>
+      </form>
+      <div class="hint">
+        Modelo atual: <span id="modelBadge">Gemini 3.8 Flash</span>.
+        A IA pode cometer erros; confira informações importantes.
+      </div>
+    </section>
+  </main>
+
+  <footer>Feito para <strong>AOIofc1</strong> · AOI IA</footer>
+
+  <div class="modal-backdrop" id="settingsModal"
+       role="dialog" aria-modal="true" aria-labelledby="settingsTitle">
+    <div class="modal">
+      <h2 id="settingsTitle">⚙ Configurações da AOI IA</h2>
+      <p>Configure sua chave e escolha o modelo que deseja usar.</p>
 
       <label for="apiKey">Chave da API Gemini</label>
       <input id="apiKey" type="password"
-        placeholder="Cole sua chave aqui"
+        placeholder="Cole sua chave da API"
         autocomplete="off" spellcheck="false">
 
+      <label for="modelSelect">Modelo Gemini</label>
+      <select id="modelSelect"></select>
+
       <p>
-        Atenção: em um site público, uma chave usada no navegador
-        pode ser descoberta por outras pessoas. Não publique uma
-        chave com acesso a dados ou serviços importantes.
+        O padrão é Gemini 3.8 Flash. O acesso aos modelos depende
+        da disponibilidade para sua chave e seu projeto Google.
+        Se um modelo não estiver disponível, selecione Gemini 3.8 Flash.
+      </p>
+
+      <p>
+        Segurança: em um site público, uma chave usada diretamente
+        no navegador pode ser vista por outras pessoas. Para publicar
+        com segurança, use um servidor que mantenha a chave privada.
       </p>
 
       <div class="modal-actions">
-        <button class="secondary danger" id="removeKey" type="button">
-          Apagar chave
-        </button>
-        <button class="secondary" id="closeSettings" type="button">
-          Fechar
-        </button>
-        <button class="primary" id="saveSettings" type="button">
-          Salvar
-        </button>
+        <button class="btn danger" id="removeKey" type="button">Apagar chave</button>
+        <button class="btn" id="closeSettings" type="button">Fechar</button>
+        <button class="primary" id="saveSettings" type="button">Salvar</button>
       </div>
     </div>
   </div>
@@ -602,26 +513,38 @@
   <script>
     "use strict";
 
-    // AOI IA - arquivo único para GitHub Pages.
-    // Modelo atualizado e endpoint da API Interactions do Gemini.
+    // AOI IA - versão com seletor de modelo e migração automática.
+    // API oficial: Gemini Interactions API.
 
-    const MODEL = "gemini-3.8-flash";
     const API_URL =
       "https://generativelanguage.googleapis.com/v1beta/interactions";
+
+    const DEFAULT_MODEL = "gemini-3.8-flash";
+
+    const MODELS = [
+      { id: "gemini-4-argon", label: "Gemini 4 Argon — raciocínio avançado" },
+      { id: "gemini-3.8-flash", label: "Gemini 3.8 Flash — recomendado" },
+      { id: "gemini-3.6-flash", label: "Gemini 3.6 Flash" },
+      { id: "gemini-3.5-flash", label: "Gemini 3.5 Flash" },
+      { id: "gemini-3.5-flash-lite", label: "Gemini 3.5 Flash-Lite — econômico" },
+      { id: "gemini-3.1-pro-preview", label: "Gemini 3.1 Pro Preview" }
+    ];
 
     const SYSTEM_INSTRUCTION = `
 Você é a AOI IA, um assistente útil, claro e educado.
 Responda preferencialmente em português do Brasil.
-Explique programação e códigos passo a passo quando necessário.
+Explique programação de forma organizada e com exemplos.
 Quando o usuário pedir código completo, entregue um exemplo completo
-e explique onde colocá-lo. Não afirme que executou ou testou algo
-se isso não aconteceu. Se não souber algo, seja honesto.
+e indique onde colocá-lo. Não afirme que executou testes se não executou.
+Se não souber algo, seja honesto.
 `;
 
     const STORAGE = {
-      key: "aoi_gemini_api_key",
+      apiKey: "aoi_gemini_api_key",
+      model: "aoi_gemini_model",
       messages: "aoi_chat_messages",
-      interaction: "aoi_last_interaction_id"
+      interaction: "aoi_last_interaction_id",
+      interactionModel: "aoi_interaction_model"
     };
 
     const $ = (selector) => document.querySelector(selector);
@@ -635,24 +558,100 @@ se isso não aconteceu. Se não souber algo, seja honesto.
     const suggestions = $("#suggestions");
     const settingsModal = $("#settingsModal");
     const apiKeyInput = $("#apiKey");
+    const modelSelect = $("#modelSelect");
 
-    let messages = loadJSON(STORAGE.messages, []);
-    let previousInteractionId =
-      localStorage.getItem(STORAGE.interaction) || "";
+    function loadMessages() {
+      try {
+        const value = JSON.parse(localStorage.getItem(STORAGE.messages) || "[]");
+        if (!Array.isArray(value)) return [];
+        return value.filter(item =>
+          item &&
+          (item.role === "user" || item.role === "assistant") &&
+          typeof item.text === "string"
+        ).slice(-60);
+      } catch {
+        return [];
+      }
+    }
+
+    // Migra a configuração anterior do modelo para a versão recomendada.
+    // O identificador antigo é montado aqui para não ser uma opção visível.
+    const OLD_MODEL_ID = ["gemini", "2.5", "flash"].join("-");
+
+    function loadModel() {
+      const saved =
+        localStorage.getItem(STORAGE.model) ||
+        localStorage.getItem("aoi_model") ||
+        "";
+
+      const isSupported = MODELS.some(item => item.id === saved);
+      const selected =
+        saved === OLD_MODEL_ID || !isSupported
+          ? DEFAULT_MODEL
+          : saved;
+
+      localStorage.setItem(STORAGE.model, selected);
+      localStorage.removeItem("aoi_model");
+
+      return selected;
+    }
+
+    let currentModel = loadModel();
+    let messages = loadMessages();
     let busy = false;
 
-    function loadJSON(key, fallback) {
-      try {
-        const value = JSON.parse(localStorage.getItem(key));
-        return Array.isArray(value) ? value : fallback;
-      } catch {
-        return fallback;
+    let previousInteractionId =
+      localStorage.getItem(STORAGE.interaction) || "";
+
+    // Não reutiliza uma interação anterior caso o modelo tenha mudado
+    // ou tenha sido guardado por uma versão anterior do site.
+    const interactionModel =
+      localStorage.getItem(STORAGE.interactionModel) || "";
+
+    if (previousInteractionId && interactionModel !== currentModel) {
+      previousInteractionId = "";
+      localStorage.removeItem(STORAGE.interaction);
+      localStorage.removeItem(STORAGE.interactionModel);
+    }
+
+    function showNotice(text) {
+      notice.textContent = text;
+      notice.classList.add("show");
+    }
+
+    function hideNotice() {
+      notice.textContent = "";
+      notice.classList.remove("show");
+    }
+
+    function getApiKey() {
+      return (localStorage.getItem(STORAGE.apiKey) || "").trim();
+    }
+
+    function modelLabel(id) {
+      const item = MODELS.find(model => model.id === id);
+      return item ? item.label : id;
+    }
+
+    function updateModelBadge() {
+      $("#modelBadge").textContent = modelLabel(currentModel);
+    }
+
+    function populateModels() {
+      modelSelect.replaceChildren();
+
+      for (const model of MODELS) {
+        const option = document.createElement("option");
+        option.value = model.id;
+        option.textContent = model.label;
+        modelSelect.appendChild(option);
       }
+
+      modelSelect.value = currentModel;
     }
 
     function saveMessages() {
       try {
-        // Mantém apenas as últimas 60 mensagens no navegador.
         localStorage.setItem(
           STORAGE.messages,
           JSON.stringify(messages.slice(-60))
@@ -662,32 +661,18 @@ se isso não aconteceu. Se não souber algo, seja honesto.
       }
     }
 
-    function showNotice(message) {
-      notice.textContent = message;
-      notice.classList.add("show");
-    }
-
-    function hideNotice() {
-      notice.textContent = "";
-      notice.classList.remove("show");
-    }
-
     function updateWelcome() {
       const hasMessages = messages.length > 0;
       welcome.hidden = hasMessages;
       suggestions.hidden = hasMessages;
     }
 
-    function addMessage(role, text, save = true) {
+    function addMessage(role, text) {
       const message = { role, text: String(text) };
       messages.push(message);
-
       renderMessage(message);
-
-      if (save) saveMessages();
+      saveMessages();
       updateWelcome();
-
-      return message;
     }
 
     function renderMessage(message) {
@@ -709,18 +694,14 @@ se isso não aconteceu. Se não souber algo, seja honesto.
 
       const bubble = document.createElement("div");
       bubble.className = "bubble";
-      // textContent evita interpretar respostas como HTML.
       bubble.textContent = message.text;
 
       content.append(name, bubble);
 
       if (!isUser) {
-        const tools = document.createElement("div");
-        tools.className = "message-tools";
-
         const copy = document.createElement("button");
         copy.type = "button";
-        copy.className = "copy-button";
+        copy.className = "copy-btn";
         copy.textContent = "📋 Copiar resposta";
 
         copy.addEventListener("click", async () => {
@@ -728,16 +709,15 @@ se isso não aconteceu. Se não souber algo, seja honesto.
             await navigator.clipboard.writeText(message.text);
             copy.textContent = "✓ Copiado!";
           } catch {
-            copy.textContent = "Não foi possível copiar";
+            showNotice("Seu navegador não permitiu copiar a resposta.");
           }
 
           setTimeout(() => {
             copy.textContent = "📋 Copiar resposta";
-          }, 1600);
+          }, 1500);
         });
 
-        tools.appendChild(copy);
-        content.appendChild(tools);
+        content.appendChild(copy);
       }
 
       row.append(avatar, content);
@@ -747,17 +727,7 @@ se isso não aconteceu. Se não souber algo, seja honesto.
 
     function renderHistory() {
       chat.replaceChildren();
-
-      for (const message of messages) {
-        if (
-          message &&
-          (message.role === "user" || message.role === "assistant") &&
-          typeof message.text === "string"
-        ) {
-          renderMessage(message);
-        }
-      }
-
+      messages.forEach(renderMessage);
       updateWelcome();
     }
 
@@ -769,12 +739,9 @@ se isso não aconteceu. Se não souber algo, seja honesto.
       sendButton.textContent = value ? "…" : "➤";
     }
 
-    function getApiKey() {
-      return (localStorage.getItem(STORAGE.key) || "").trim();
-    }
-
     function openSettings() {
       apiKeyInput.value = getApiKey();
+      modelSelect.value = currentModel;
       settingsModal.classList.add("open");
       setTimeout(() => apiKeyInput.focus(), 50);
     }
@@ -786,44 +753,62 @@ se isso não aconteceu. Se não souber algo, seja honesto.
     $("#openSettings").addEventListener("click", openSettings);
     $("#closeSettings").addEventListener("click", closeSettings);
 
-    settingsModal.addEventListener("click", (event) => {
+    settingsModal.addEventListener("click", event => {
       if (event.target === settingsModal) closeSettings();
     });
 
     $("#saveSettings").addEventListener("click", () => {
       const key = apiKeyInput.value.trim();
+      const selectedModel = modelSelect.value;
 
-      if (!key) {
-        showNotice("Cole sua chave da API Gemini antes de salvar.");
+      if (!MODELS.some(item => item.id === selectedModel)) {
+        showNotice("Selecione um modelo válido.");
         return;
       }
 
-      localStorage.setItem(STORAGE.key, key);
-      hideNotice();
+      if (key) {
+        localStorage.setItem(STORAGE.apiKey, key);
+      } else if (!getApiKey()) {
+        showNotice("Coloque sua chave da API Gemini antes de salvar.");
+        return;
+      }
+
+      if (selectedModel !== currentModel) {
+        currentModel = selectedModel;
+
+        // Uma interação antiga não deve ser reutilizada com outro modelo.
+        previousInteractionId = "";
+        localStorage.removeItem(STORAGE.interaction);
+        localStorage.removeItem(STORAGE.interactionModel);
+
+        localStorage.setItem(STORAGE.model, currentModel);
+      }
+
+      updateModelBadge();
       closeSettings();
-      showNotice("Chave salva neste navegador. Você já pode enviar mensagens.");
+      hideNotice();
+      showNotice("Configuração salva. Modelo selecionado: " + modelLabel(currentModel));
     });
 
     $("#removeKey").addEventListener("click", () => {
-      localStorage.removeItem(STORAGE.key);
+      localStorage.removeItem(STORAGE.apiKey);
       apiKeyInput.value = "";
-      showNotice("A chave foi apagada deste navegador.");
+      showNotice("Chave apagada deste navegador.");
     });
 
     $("#newChat").addEventListener("click", () => {
       if (busy) return;
 
-      const confirmed = confirm(
-        "Começar uma nova conversa? O histórico atual será apagado."
-      );
-
-      if (!confirmed) return;
+      if (!confirm("Começar uma nova conversa? O histórico local será apagado.")) {
+        return;
+      }
 
       messages = [];
       previousInteractionId = "";
 
       localStorage.removeItem(STORAGE.messages);
       localStorage.removeItem(STORAGE.interaction);
+      localStorage.removeItem(STORAGE.interactionModel);
 
       chat.replaceChildren();
       hideNotice();
@@ -832,7 +817,7 @@ se isso não aconteceu. Se não souber algo, seja honesto.
       promptBox.focus();
     });
 
-    document.querySelectorAll("[data-prompt]").forEach((button) => {
+    document.querySelectorAll("[data-prompt]").forEach(button => {
       button.addEventListener("click", () => {
         promptBox.value = button.dataset.prompt;
         promptBox.focus();
@@ -848,7 +833,7 @@ se isso não aconteceu. Se não souber algo, seja honesto.
 
     promptBox.addEventListener("input", resizePrompt);
 
-    promptBox.addEventListener("keydown", (event) => {
+    promptBox.addEventListener("keydown", event => {
       if (event.key === "Enter" && !event.shiftKey) {
         event.preventDefault();
         $("#chatForm").requestSubmit();
@@ -856,32 +841,30 @@ se isso não aconteceu. Se não souber algo, seja honesto.
     });
 
     function extractText(data) {
-      // Algumas respostas REST trazem output_text; outras, blocos
-      // de texto dentro de output/steps. Tenta os formatos conhecidos.
       if (typeof data.output_text === "string" && data.output_text.trim()) {
         return data.output_text.trim();
       }
 
-      const collected = [];
+      if (typeof data.output === "string" && data.output.trim()) {
+        return data.output.trim();
+      }
 
-      function walk(value) {
-        if (!value || typeof value !== "object") return;
+      const parts = [];
 
-        if (Array.isArray(value)) {
-          value.forEach(walk);
+      function walk(node) {
+        if (!node || typeof node !== "object") return;
+
+        if (Array.isArray(node)) {
+          node.forEach(walk);
           return;
         }
 
-        if (
-          value.type === "text" &&
-          typeof value.text === "string" &&
-          value.text.trim()
-        ) {
-          collected.push(value.text);
+        if (node.type === "text" && typeof node.text === "string") {
+          if (node.text.trim()) parts.push(node.text);
           return;
         }
 
-        for (const [key, child] of Object.entries(value)) {
+        for (const [key, value] of Object.entries(node)) {
           if (
             key === "thought" ||
             key === "thought_signature" ||
@@ -891,22 +874,43 @@ se isso não aconteceu. Se não souber algo, seja honesto.
             continue;
           }
 
-          if (
-            key === "text" &&
-            typeof child === "string" &&
-            child.trim()
-          ) {
-            collected.push(child);
-          } else if (child && typeof child === "object") {
-            walk(child);
+          if (key === "text" && typeof value === "string") {
+            if (value.trim()) parts.push(value);
+          } else if (value && typeof value === "object") {
+            walk(value);
           }
         }
       }
 
-      walk(data.output);
-      if (collected.length === 0) walk(data.steps);
+      walk(data.output || data.steps || []);
 
-      return [...new Set(collected)].join("\n").trim();
+      return [...new Set(parts)].join("\n").trim();
+    }
+
+    function buildInput(userText) {
+      // Se já existe uma interação do mesmo modelo, a API preserva
+      // o histórico no servidor e só precisamos enviar a mensagem nova.
+      if (previousInteractionId) {
+        return userText;
+      }
+
+      // Se o usuário mudou de modelo ou iniciou uma sessão nova,
+      // envia as últimas mensagens locais como contexto.
+      const previousMessages = messages.slice(0, -1).slice(-12);
+
+      if (previousMessages.length === 0) {
+        return userText;
+      }
+
+      const history = previousMessages.map(message => {
+        const speaker = message.role === "user" ? "Usuário" : "AOI IA";
+        return speaker + ": " + message.text;
+      }).join("\n\n");
+
+      return "Histórico da conversa para contexto:\n\n" +
+        history +
+        "\n\nMensagem atual do usuário:\n" +
+        userText;
     }
 
     async function askGemini(userText) {
@@ -914,20 +918,22 @@ se isso não aconteceu. Se não souber algo, seja honesto.
 
       if (!apiKey) {
         openSettings();
-        showNotice("Primeiro, coloque sua chave da API Gemini nas configurações.");
-        return;
+        throw new Error("Configure sua chave da API Gemini nas configurações.");
       }
 
+      // Garante que a requisição sempre usa o modelo do seletor,
+      // nunca um modelo fixo antigo.
       const requestBody = {
-        model: MODEL,
+        model: currentModel,
         system_instruction: SYSTEM_INSTRUCTION,
-        input: userText
+        input: buildInput(userText)
       };
 
-      // Continua a conversa pela API Interactions.
       if (previousInteractionId) {
         requestBody.previous_interaction_id = previousInteractionId;
       }
+
+      console.info("[AOI IA] Modelo enviado à API:", currentModel);
 
       const response = await fetch(API_URL, {
         method: "POST",
@@ -943,24 +949,23 @@ se isso não aconteceu. Se não souber algo, seja honesto.
       try {
         data = await response.json();
       } catch {
-        throw new Error("A API retornou uma resposta que não é JSON.");
+        throw new Error("A API retornou uma resposta inválida.");
       }
 
       if (!response.ok) {
         const apiMessage =
-          data.error?.message ||
-          data.message ||
-          `Erro HTTP ${response.status}`;
+          data?.error?.message ||
+          data?.message ||
+          ("Erro HTTP " + response.status);
 
-        // Se o ID antigo deixou de ser válido, limpa-o para permitir
-        // que o usuário tente novamente numa conversa nova.
+        // Descarta IDs de conversa que não sejam mais válidos.
         if (
           previousInteractionId &&
-          /previous_interaction_id|interaction.*not found|invalid.*interaction/i
-            .test(apiMessage)
+          /previous_interaction_id|interaction.*not found|invalid.*interaction/i.test(apiMessage)
         ) {
           previousInteractionId = "";
           localStorage.removeItem(STORAGE.interaction);
+          localStorage.removeItem(STORAGE.interactionModel);
         }
 
         throw new Error(apiMessage);
@@ -969,20 +974,21 @@ se isso não aconteceu. Se não souber algo, seja honesto.
       if (data.id) {
         previousInteractionId = data.id;
         localStorage.setItem(STORAGE.interaction, data.id);
+        localStorage.setItem(STORAGE.interactionModel, currentModel);
       }
 
       const answer = extractText(data);
 
       if (!answer) {
         throw new Error(
-          "A API respondeu, mas não encontrei texto na resposta. Tente novamente."
+          "A API respondeu, mas não encontrei o texto. Tente novamente."
         );
       }
 
       return answer;
     }
 
-    $("#chatForm").addEventListener("submit", async (event) => {
+    $("#chatForm").addEventListener("submit", async event => {
       event.preventDefault();
 
       if (busy) return;
@@ -1000,15 +1006,17 @@ se isso não aconteceu. Se não souber algo, seja honesto.
         const answer = await askGemini(userText);
         addMessage("assistant", answer);
       } catch (error) {
-        console.error("Erro AOI IA:", error);
+        console.error("[AOI IA] Erro:", error);
 
         const detail = error?.message || "Erro desconhecido.";
-        showNotice("Não consegui obter uma resposta: " + detail);
+
+        showNotice("Não foi possível responder: " + detail);
 
         addMessage(
           "assistant",
-          "Não consegui responder desta vez. Confira a chave da API, a conexão e os limites da sua conta Gemini. Detalhe: " +
-            detail
+          "Não consegui responder desta vez.\n\n" +
+          "Confira o modelo selecionado, a chave da API e os limites da sua conta.\n\n" +
+          "Detalhe: " + detail
         );
       } finally {
         setBusy(false);
@@ -1016,9 +1024,11 @@ se isso não aconteceu. Se não souber algo, seja honesto.
       }
     });
 
+    populateModels();
+    updateModelBadge();
     renderHistory();
 
-    // Se ainda não houver chave, abre as configurações para facilitar.
+    // Se ainda não há chave, abre a configuração automaticamente.
     if (!getApiKey()) {
       setTimeout(openSettings, 350);
     }
