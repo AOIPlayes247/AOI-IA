@@ -11,7 +11,7 @@
     :root {
       --bg: #090909;
       --panel: #141414;
-      --panel2: #1d1d1d;
+      --panel2: #202020;
       --red: #ff2020;
       --text: #f5f5f5;
       --muted: #a4a4a4;
@@ -28,7 +28,7 @@
       font-family: Arial, Helvetica, sans-serif;
     }
 
-    button, input, select, textarea { font: inherit; }
+    button, input, textarea, select { font: inherit; }
     button { cursor: pointer; }
 
     header {
@@ -36,8 +36,8 @@
       top: 0;
       z-index: 5;
       display: flex;
-      justify-content: space-between;
       align-items: center;
+      justify-content: space-between;
       gap: 12px;
       padding: 14px 20px;
       background: #090909f5;
@@ -65,21 +65,18 @@
 
     .brand small {
       display: block;
+      margin-top: 3px;
       color: var(--muted);
       font-size: 11px;
       font-weight: normal;
-      margin-top: 3px;
     }
 
     .actions {
       display: flex;
-      flex-wrap: wrap;
       gap: 8px;
-      align-items: center;
-      justify-content: flex-end;
     }
 
-    .btn, .icon-btn {
+    .btn {
       padding: 10px 12px;
       color: var(--text);
       background: var(--panel2);
@@ -87,21 +84,19 @@
       border-radius: 10px;
     }
 
-    .btn:hover, .icon-btn:hover {
-      border-color: var(--red);
-    }
+    .btn:hover { border-color: var(--red); }
 
     .led {
       height: 3px;
       background: linear-gradient(
-        90deg, transparent, #ff2020, white, #ff2020, transparent
+        90deg, transparent, var(--red), white, var(--red), transparent
       );
       background-size: 200% 100%;
-      animation: led 4s linear infinite;
+      animation: ledMove 4s linear infinite;
       box-shadow: 0 0 12px #ff202088;
     }
 
-    @keyframes led {
+    @keyframes ledMove {
       from { background-position: 200% 0; }
       to { background-position: -200% 0; }
     }
@@ -111,14 +106,14 @@
       flex-direction: column;
       width: 100%;
       max-width: 950px;
-      min-height: calc(100vh - 105px);
+      min-height: calc(100vh - 110px);
       margin: auto;
       padding: 22px 16px 12px;
     }
 
     .welcome {
+      padding: 48px 10px 28px;
       text-align: center;
-      padding: 50px 10px 28px;
     }
 
     .welcome-logo {
@@ -126,23 +121,23 @@
       place-items: center;
       width: 72px;
       height: 72px;
-      margin: auto auto 20px;
+      margin: 0 auto 20px;
       border-radius: 22px;
       background: linear-gradient(135deg, #ff3030, #920000);
+      box-shadow: 0 0 38px #ff202025;
       font-size: 25px;
       font-weight: 900;
-      box-shadow: 0 0 38px #ff202025;
     }
 
     .welcome h1 {
-      font-size: clamp(27px, 5vw, 42px);
       margin: 0 0 12px;
+      font-size: clamp(27px, 5vw, 42px);
     }
 
     .red { color: var(--red); }
 
     .welcome p {
-      max-width: 530px;
+      max-width: 520px;
       margin: auto;
       color: var(--muted);
       line-height: 1.65;
@@ -159,17 +154,15 @@
 
     .suggestion {
       padding: 15px;
-      text-align: left;
       color: var(--text);
       background: var(--panel);
       border: 1px solid var(--border);
       border-radius: 12px;
+      text-align: left;
       line-height: 1.5;
     }
 
-    .suggestion:hover {
-      border-color: var(--red);
-    }
+    .suggestion:hover { border-color: var(--red); }
 
     #chat {
       display: flex;
@@ -207,32 +200,32 @@
     }
 
     .message-name {
+      margin: 2px 0 7px;
       color: var(--muted);
       font-size: 12px;
-      margin: 2px 0 7px;
     }
 
     .bubble {
       padding: 13px 15px;
-      border: 1px solid var(--border);
-      border-radius: 4px 14px 14px;
       background: var(--panel);
+      border: 1px solid var(--border);
+      border-radius: 4px 14px 14px 14px;
+      line-height: 1.65;
       white-space: pre-wrap;
       overflow-wrap: anywhere;
-      line-height: 1.65;
     }
 
     .user .bubble {
-      border-color: #512020;
       background: #251010;
+      border-color: #512020;
       border-radius: 14px 4px 14px 14px;
     }
 
     .copy-btn {
       padding: 7px 0 0;
-      border: 0;
       color: var(--muted);
       background: transparent;
+      border: 0;
       font-size: 12px;
     }
 
@@ -284,29 +277,32 @@
       width: 44px;
       height: 44px;
       flex-shrink: 0;
-      border: 0;
-      border-radius: 12px;
       color: white;
       background: var(--red);
-      font-weight: bold;
+      border: 0;
+      border-radius: 12px;
       font-size: 19px;
+      font-weight: bold;
     }
 
-    #send:disabled { opacity: .5; cursor: not-allowed; }
+    #send:disabled {
+      opacity: .5;
+      cursor: not-allowed;
+    }
 
     .hint {
+      margin-top: 10px;
       color: #777;
       font-size: 11px;
       line-height: 1.6;
       text-align: center;
-      margin-top: 10px;
     }
 
     footer {
       padding: 15px;
+      color: #777;
       border-top: 1px solid var(--border);
       text-align: center;
-      color: #777;
       font-size: 11px;
     }
 
@@ -332,8 +328,8 @@
       inset: 0;
       z-index: 20;
       display: none;
-      justify-content: center;
       align-items: center;
+      justify-content: center;
       padding: 16px;
       background: #000c;
     }
@@ -346,9 +342,9 @@
       max-height: 90vh;
       overflow-y: auto;
       padding: 22px;
+      background: #121212;
       border: 1px solid #393939;
       border-radius: 18px;
-      background: #121212;
       box-shadow: 0 20px 70px #0009;
     }
 
@@ -393,9 +389,9 @@
     .primary {
       padding: 11px 15px;
       color: white;
+      background: var(--red);
       border: 0;
       border-radius: 10px;
-      background: var(--red);
     }
 
     .danger { color: #ffaaaa; }
@@ -458,7 +454,7 @@
     </section>
 
     <section id="chat" aria-live="polite"></section>
-    <div id="typing" class="typing" hidden>AOI IA está pensando...</div>
+    <div id="typing" class="typing" hidden>Conectando ao Gemini...</div>
 
     <section class="composer-area">
       <form id="chatForm" class="composer">
@@ -467,9 +463,10 @@
           aria-label="Sua mensagem"></textarea>
         <button id="send" type="submit" aria-label="Enviar mensagem">➤</button>
       </form>
+
       <div class="hint">
-        Modelo atual: <span id="modelBadge">Gemini 3.8 Flash</span>.
-        A IA pode cometer erros; confira informações importantes.
+        Modelo: <span id="modelBadge">Gemini 3.8 Flash</span> ·
+        As respostas aparecem enquanto são geradas.
       </div>
     </section>
   </main>
@@ -480,7 +477,7 @@
        role="dialog" aria-modal="true" aria-labelledby="settingsTitle">
     <div class="modal">
       <h2 id="settingsTitle">⚙ Configurações da AOI IA</h2>
-      <p>Configure sua chave e escolha o modelo que deseja usar.</p>
+      <p>Configure sua chave da API e escolha o modelo.</p>
 
       <label for="apiKey">Chave da API Gemini</label>
       <input id="apiKey" type="password"
@@ -491,15 +488,15 @@
       <select id="modelSelect"></select>
 
       <p>
-        O padrão é Gemini 3.8 Flash. O acesso aos modelos depende
-        da disponibilidade para sua chave e seu projeto Google.
-        Se um modelo não estiver disponível, selecione Gemini 3.8 Flash.
+        Para priorizar a velocidade, comece com Gemini 3.8 Flash.
+        Gemini 3.5 Flash-Lite pode ser uma alternativa mais leve,
+        se estiver disponível para sua conta.
       </p>
 
       <p>
-        Segurança: em um site público, uma chave usada diretamente
-        no navegador pode ser vista por outras pessoas. Para publicar
-        com segurança, use um servidor que mantenha a chave privada.
+        Atenção: em um site público, uma chave colocada no navegador
+        pode ser descoberta por outras pessoas. Para publicar com
+        segurança, use um servidor que mantenha a chave privada.
       </p>
 
       <div class="modal-actions">
@@ -513,8 +510,19 @@
   <script>
     "use strict";
 
-    // AOI IA - versão com seletor de modelo e migração automática.
-    // API oficial: Gemini Interactions API.
+    /*
+      AOI IA — versão com streaming de respostas.
+
+      API:
+      POST https://generativelanguage.googleapis.com/v1beta/interactions
+
+      Melhorias:
+      - stream: true: mostra o texto conforme a API o envia.
+      - thinking_level: low: reduz o esforço de raciocínio.
+      - limite de saída para controlar respostas longas.
+      - modelo 2.5 antigo é migrado para 3.8 Flash.
+      - histórico continua usando previous_interaction_id.
+    */
 
     const API_URL =
       "https://generativelanguage.googleapis.com/v1beta/interactions";
@@ -522,22 +530,32 @@
     const DEFAULT_MODEL = "gemini-3.8-flash";
 
     const MODELS = [
-      { id: "gemini-4-argon", label: "Gemini 4 Argon — raciocínio avançado" },
-      { id: "gemini-3.8-flash", label: "Gemini 3.8 Flash — recomendado" },
-      { id: "gemini-3.6-flash", label: "Gemini 3.6 Flash" },
-      { id: "gemini-3.5-flash", label: "Gemini 3.5 Flash" },
-      { id: "gemini-3.5-flash-lite", label: "Gemini 3.5 Flash-Lite — econômico" },
-      { id: "gemini-3.1-pro-preview", label: "Gemini 3.1 Pro Preview" }
+      {
+        id: "gemini-3.8-flash",
+        label: "Gemini 3.8 Flash — recomendado"
+      },
+      {
+        id: "gemini-3.6-flash",
+        label: "Gemini 3.6 Flash"
+      },
+      {
+        id: "gemini-3.5-flash-lite",
+        label: "Gemini 3.5 Flash-Lite — leve"
+      },
+      {
+        id: "gemini-3.1-pro-preview",
+        label: "Gemini 3.1 Pro Preview — mais raciocínio"
+      }
     ];
 
-    const SYSTEM_INSTRUCTION = `
-Você é a AOI IA, um assistente útil, claro e educado.
-Responda preferencialmente em português do Brasil.
-Explique programação de forma organizada e com exemplos.
-Quando o usuário pedir código completo, entregue um exemplo completo
-e indique onde colocá-lo. Não afirme que executou testes se não executou.
-Se não souber algo, seja honesto.
-`;
+    const SYSTEM_INSTRUCTION = [
+      "Você é a AOI IA, um assistente útil, preciso e educado.",
+      "Responda em português do Brasil, salvo se o usuário pedir outro idioma.",
+      "Para perguntas simples, responda diretamente e sem enrolação.",
+      "Para tarefas complexas, explique e dê detalhes suficientes.",
+      "Quando pedirem código completo, forneça código coerente e indique onde usar.",
+      "Não afirme que executou testes se não os executou."
+    ].join(" ");
 
     const STORAGE = {
       apiKey: "aoi_gemini_api_key",
@@ -547,7 +565,7 @@ Se não souber algo, seja honesto.
       interactionModel: "aoi_interaction_model"
     };
 
-    const $ = (selector) => document.querySelector(selector);
+    const $ = selector => document.querySelector(selector);
 
     const chat = $("#chat");
     const promptBox = $("#prompt");
@@ -562,38 +580,33 @@ Se não souber algo, seja honesto.
 
     function loadMessages() {
       try {
-        const value = JSON.parse(localStorage.getItem(STORAGE.messages) || "[]");
-        if (!Array.isArray(value)) return [];
-        return value.filter(item =>
-          item &&
-          (item.role === "user" || item.role === "assistant") &&
-          typeof item.text === "string"
-        ).slice(-60);
+        const saved = JSON.parse(
+          localStorage.getItem(STORAGE.messages) || "[]"
+        );
+
+        if (!Array.isArray(saved)) return [];
+
+        return saved
+          .filter(item =>
+            item &&
+            (item.role === "user" || item.role === "assistant") &&
+            typeof item.text === "string"
+          )
+          .slice(-60);
       } catch {
         return [];
       }
     }
 
-    // Migra a configuração anterior do modelo para a versão recomendada.
-    // O identificador antigo é montado aqui para não ser uma opção visível.
-    const OLD_MODEL_ID = ["gemini", "2.5", "flash"].join("-");
-
     function loadModel() {
-      const saved =
-        localStorage.getItem(STORAGE.model) ||
-        localStorage.getItem("aoi_model") ||
-        "";
+      const saved = localStorage.getItem(STORAGE.model) || "";
 
-      const isSupported = MODELS.some(item => item.id === saved);
-      const selected =
-        saved === OLD_MODEL_ID || !isSupported
-          ? DEFAULT_MODEL
-          : saved;
+      // Qualquer modelo antigo ou desconhecido volta ao padrão rápido.
+      const exists = MODELS.some(model => model.id === saved);
+      const chosen = exists ? saved : DEFAULT_MODEL;
 
-      localStorage.setItem(STORAGE.model, selected);
-      localStorage.removeItem("aoi_model");
-
-      return selected;
+      localStorage.setItem(STORAGE.model, chosen);
+      return chosen;
     }
 
     let currentModel = loadModel();
@@ -603,19 +616,21 @@ Se não souber algo, seja honesto.
     let previousInteractionId =
       localStorage.getItem(STORAGE.interaction) || "";
 
-    // Não reutiliza uma interação anterior caso o modelo tenha mudado
-    // ou tenha sido guardado por uma versão anterior do site.
-    const interactionModel =
+    const savedInteractionModel =
       localStorage.getItem(STORAGE.interactionModel) || "";
 
-    if (previousInteractionId && interactionModel !== currentModel) {
+    // Não reutiliza uma interação feita com outro modelo.
+    if (
+      previousInteractionId &&
+      savedInteractionModel !== currentModel
+    ) {
       previousInteractionId = "";
       localStorage.removeItem(STORAGE.interaction);
       localStorage.removeItem(STORAGE.interactionModel);
     }
 
-    function showNotice(text) {
-      notice.textContent = text;
+    function showNotice(message) {
+      notice.textContent = message;
       notice.classList.add("show");
     }
 
@@ -628,9 +643,25 @@ Se não souber algo, seja honesto.
       return (localStorage.getItem(STORAGE.apiKey) || "").trim();
     }
 
+    function saveMessages() {
+      try {
+        localStorage.setItem(
+          STORAGE.messages,
+          JSON.stringify(messages.slice(-60))
+        );
+      } catch {
+        showNotice("Não foi possível salvar o histórico neste navegador.");
+      }
+    }
+
+    function updateWelcome() {
+      const hasMessages = messages.length > 0;
+      welcome.hidden = hasMessages;
+      suggestions.hidden = hasMessages;
+    }
+
     function modelLabel(id) {
-      const item = MODELS.find(model => model.id === id);
-      return item ? item.label : id;
+      return MODELS.find(model => model.id === id)?.label || id;
     }
 
     function updateModelBadge() {
@@ -648,31 +679,6 @@ Se não souber algo, seja honesto.
       }
 
       modelSelect.value = currentModel;
-    }
-
-    function saveMessages() {
-      try {
-        localStorage.setItem(
-          STORAGE.messages,
-          JSON.stringify(messages.slice(-60))
-        );
-      } catch {
-        showNotice("Não foi possível guardar o histórico neste navegador.");
-      }
-    }
-
-    function updateWelcome() {
-      const hasMessages = messages.length > 0;
-      welcome.hidden = hasMessages;
-      suggestions.hidden = hasMessages;
-    }
-
-    function addMessage(role, text) {
-      const message = { role, text: String(text) };
-      messages.push(message);
-      renderMessage(message);
-      saveMessages();
-      updateWelcome();
     }
 
     function renderMessage(message) {
@@ -699,35 +705,75 @@ Se não souber algo, seja honesto.
       content.append(name, bubble);
 
       if (!isUser) {
-        const copy = document.createElement("button");
-        copy.type = "button";
-        copy.className = "copy-btn";
-        copy.textContent = "📋 Copiar resposta";
+        const copyButton = document.createElement("button");
+        copyButton.type = "button";
+        copyButton.className = "copy-btn";
+        copyButton.textContent = "📋 Copiar resposta";
 
-        copy.addEventListener("click", async () => {
+        copyButton.addEventListener("click", async () => {
           try {
             await navigator.clipboard.writeText(message.text);
-            copy.textContent = "✓ Copiado!";
+            copyButton.textContent = "✓ Copiado!";
           } catch {
-            showNotice("Seu navegador não permitiu copiar a resposta.");
+            showNotice("O navegador não permitiu copiar a resposta.");
           }
 
           setTimeout(() => {
-            copy.textContent = "📋 Copiar resposta";
+            copyButton.textContent = "📋 Copiar resposta";
           }, 1500);
         });
 
-        content.appendChild(copy);
+        content.appendChild(copyButton);
       }
 
       row.append(avatar, content);
       chat.appendChild(row);
+
       row.scrollIntoView({ behavior: "smooth", block: "nearest" });
+
+      return { row, bubble };
+    }
+
+    function addMessage(role, text) {
+      const record = { role, text: String(text) };
+      messages.push(record);
+
+      const elements = renderMessage(record);
+
+      saveMessages();
+      updateWelcome();
+
+      return { record, ...elements };
+    }
+
+    function createStreamingMessage() {
+      const record = { role: "assistant", text: "" };
+      messages.push(record);
+
+      const elements = renderMessage(record);
+      updateWelcome();
+
+      return { record, ...elements };
+    }
+
+    function updateStreamingMessage(entry, fullText) {
+      entry.record.text = fullText;
+      entry.bubble.textContent = fullText;
+
+      // Mantém o trecho que está sendo gerado visível.
+      entry.row.scrollIntoView({
+        behavior: "auto",
+        block: "nearest"
+      });
     }
 
     function renderHistory() {
       chat.replaceChildren();
-      messages.forEach(renderMessage);
+
+      for (const message of messages) {
+        renderMessage(message);
+      }
+
       updateWelcome();
     }
 
@@ -761,7 +807,7 @@ Se não souber algo, seja honesto.
       const key = apiKeyInput.value.trim();
       const selectedModel = modelSelect.value;
 
-      if (!MODELS.some(item => item.id === selectedModel)) {
+      if (!MODELS.some(model => model.id === selectedModel)) {
         showNotice("Selecione um modelo válido.");
         return;
       }
@@ -775,19 +821,19 @@ Se não souber algo, seja honesto.
 
       if (selectedModel !== currentModel) {
         currentModel = selectedModel;
+        localStorage.setItem(STORAGE.model, currentModel);
 
-        // Uma interação antiga não deve ser reutilizada com outro modelo.
+        // Uma conversa encadeada com outro modelo não deve ser reutilizada.
         previousInteractionId = "";
         localStorage.removeItem(STORAGE.interaction);
         localStorage.removeItem(STORAGE.interactionModel);
-
-        localStorage.setItem(STORAGE.model, currentModel);
       }
 
       updateModelBadge();
       closeSettings();
       hideNotice();
-      showNotice("Configuração salva. Modelo selecionado: " + modelLabel(currentModel));
+
+      showNotice("Configuração salva: " + modelLabel(currentModel));
     });
 
     $("#removeKey").addEventListener("click", () => {
@@ -840,80 +886,175 @@ Se não souber algo, seja honesto.
       }
     });
 
-    function extractText(data) {
-      if (typeof data.output_text === "string" && data.output_text.trim()) {
-        return data.output_text.trim();
-      }
+    // Saudações básicas não precisam esperar uma chamada à API.
+    function isSimpleGreeting(text) {
+      const normalized = text
+        .toLocaleLowerCase("pt-BR")
+        .normalize("NFD")
+        .replace(/[\u0300-\u036f]/g, "")
+        .replace(/[!?.;,]+/g, " ")
+        .trim()
+        .replace(/\s+/g, " ");
 
-      if (typeof data.output === "string" && data.output.trim()) {
-        return data.output.trim();
-      }
-
-      const parts = [];
-
-      function walk(node) {
-        if (!node || typeof node !== "object") return;
-
-        if (Array.isArray(node)) {
-          node.forEach(walk);
-          return;
-        }
-
-        if (node.type === "text" && typeof node.text === "string") {
-          if (node.text.trim()) parts.push(node.text);
-          return;
-        }
-
-        for (const [key, value] of Object.entries(node)) {
-          if (
-            key === "thought" ||
-            key === "thought_signature" ||
-            key === "usage" ||
-            key === "metadata"
-          ) {
-            continue;
-          }
-
-          if (key === "text" && typeof value === "string") {
-            if (value.trim()) parts.push(value);
-          } else if (value && typeof value === "object") {
-            walk(value);
-          }
-        }
-      }
-
-      walk(data.output || data.steps || []);
-
-      return [...new Set(parts)].join("\n").trim();
+      return [
+        "oi",
+        "ola",
+        "opa",
+        "eai",
+        "e ae",
+        "bom dia",
+        "boa tarde",
+        "boa noite",
+        "tudo bem"
+      ].includes(normalized);
     }
 
-    function buildInput(userText) {
-      // Se já existe uma interação do mesmo modelo, a API preserva
-      // o histórico no servidor e só precisamos enviar a mensagem nova.
-      if (previousInteractionId) {
+    // Se a conversa ainda não tem ID de interação, envia um contexto
+    // curto com o histórico local, em vez de perder as mensagens antigas.
+    function buildContextInput(userText) {
+      let currentIndex = -1;
+
+      for (let i = messages.length - 1; i >= 0; i--) {
+        if (
+          messages[i].role === "user" &&
+          messages[i].text === userText
+        ) {
+          currentIndex = i;
+          break;
+        }
+      }
+
+      const earlierMessages = (
+        currentIndex >= 0
+          ? messages.slice(0, currentIndex)
+          : messages
+      ).slice(-10);
+
+      if (!earlierMessages.length) {
         return userText;
       }
 
-      // Se o usuário mudou de modelo ou iniciou uma sessão nova,
-      // envia as últimas mensagens locais como contexto.
-      const previousMessages = messages.slice(0, -1).slice(-12);
-
-      if (previousMessages.length === 0) {
-        return userText;
-      }
-
-      const history = previousMessages.map(message => {
+      const history = earlierMessages.map(message => {
         const speaker = message.role === "user" ? "Usuário" : "AOI IA";
         return speaker + ": " + message.text;
       }).join("\n\n");
 
-      return "Histórico da conversa para contexto:\n\n" +
+      return "Histórico recente da conversa:\n" +
         history +
         "\n\nMensagem atual do usuário:\n" +
         userText;
     }
 
-    async function askGemini(userText) {
+    function makeRequestBody(userText, usePreviousInteraction) {
+      const body = {
+        model: currentModel,
+        input: usePreviousInteraction
+          ? userText
+          : buildContextInput(userText),
+
+        system_instruction: SYSTEM_INSTRUCTION,
+
+        // O streaming permite que a interface mostre o texto
+        // antes de a resposta inteira terminar.
+        stream: true,
+
+        // Configuração voltada para respostas mais rápidas.
+        generation_config: {
+          thinking_level: "low",
+          max_output_tokens: 4096
+        }
+      };
+
+      if (usePreviousInteraction && previousInteractionId) {
+        body.previous_interaction_id = previousInteractionId;
+      }
+
+      return body;
+    }
+
+    function createHttpError(status, message) {
+      const error = new Error(message);
+      error.httpStatus = status;
+      return error;
+    }
+
+    async function readErrorResponse(response) {
+      try {
+        const data = await response.json();
+        return (
+          data?.error?.message ||
+          data?.message ||
+          ("Erro HTTP " + response.status)
+        );
+      } catch {
+        return "Erro HTTP " + response.status;
+      }
+    }
+
+    // Lê um evento SSE do formato:
+    // event: step.delta
+    // data: {"event_type":"step.delta", ...}
+    function parseSSEBlock(block, onEvent) {
+      const data = block
+        .split(/\r?\n/)
+        .filter(line => line.startsWith("data:"))
+        .map(line => line.slice(5).trimStart())
+        .join("\n")
+        .trim();
+
+      if (!data || data === "[DONE]") return;
+
+      let event;
+
+      try {
+        event = JSON.parse(data);
+      } catch {
+        // Ignora blocos incompletos ou que não sejam JSON válido.
+        return;
+      }
+
+      onEvent(event);
+    }
+
+    async function consumeSSE(response, onEvent) {
+      if (!response.body) {
+        throw new Error("O navegador não recebeu o fluxo de resposta da API.");
+      }
+
+      const reader = response.body.getReader();
+      const decoder = new TextDecoder();
+
+      let buffer = "";
+
+      try {
+        while (true) {
+          const { value, done } = await reader.read();
+
+          if (done) break;
+
+          buffer += decoder.decode(value, { stream: true });
+
+          const blocks = buffer.split(/\r?\n\r?\n/);
+          buffer = blocks.pop() || "";
+
+          for (const block of blocks) {
+            if (block.trim()) {
+              parseSSEBlock(block, onEvent);
+            }
+          }
+        }
+
+        buffer += decoder.decode();
+
+        if (buffer.trim()) {
+          parseSSEBlock(buffer, onEvent);
+        }
+      } finally {
+        reader.releaseLock();
+      }
+    }
+
+    async function streamGemini(userText, onText, usePreviousInteraction) {
       const apiKey = getApiKey();
 
       if (!apiKey) {
@@ -921,71 +1062,130 @@ Se não souber algo, seja honesto.
         throw new Error("Configure sua chave da API Gemini nas configurações.");
       }
 
-      // Garante que a requisição sempre usa o modelo do seletor,
-      // nunca um modelo fixo antigo.
-      const requestBody = {
-        model: currentModel,
-        system_instruction: SYSTEM_INSTRUCTION,
-        input: buildInput(userText)
-      };
+      const body = makeRequestBody(
+        userText,
+        usePreviousInteraction
+      );
 
-      if (previousInteractionId) {
-        requestBody.previous_interaction_id = previousInteractionId;
-      }
-
-      console.info("[AOI IA] Modelo enviado à API:", currentModel);
+      console.info("[AOI IA] Modelo enviado:", currentModel);
+      console.info("[AOI IA] Streaming ativado; raciocínio low.");
 
       const response = await fetch(API_URL, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
+          "Accept": "text/event-stream",
           "x-goog-api-key": apiKey
         },
-        body: JSON.stringify(requestBody)
+        body: JSON.stringify(body)
       });
 
-      let data;
-
-      try {
-        data = await response.json();
-      } catch {
-        throw new Error("A API retornou uma resposta inválida.");
+      if (!response.ok) {
+        const message = await readErrorResponse(response);
+        throw createHttpError(response.status, message);
       }
 
-      if (!response.ok) {
-        const apiMessage =
-          data?.error?.message ||
-          data?.message ||
-          ("Erro HTTP " + response.status);
+      let answer = "";
+      let completedId = "";
+      let completedStatus = "";
 
-        // Descarta IDs de conversa que não sejam mais válidos.
-        if (
-          previousInteractionId &&
-          /previous_interaction_id|interaction.*not found|invalid.*interaction/i.test(apiMessage)
-        ) {
-          previousInteractionId = "";
-          localStorage.removeItem(STORAGE.interaction);
-          localStorage.removeItem(STORAGE.interactionModel);
+      await consumeSSE(response, event => {
+        const type = event.event_type;
+
+        if (type === "error") {
+          throw new Error(
+            event.error?.message || "A API retornou um erro durante o streaming."
+          );
         }
 
-        throw new Error(apiMessage);
-      }
+        if (type === "interaction.created") {
+          completedId = event.interaction?.id || completedId;
+        }
 
-      if (data.id) {
-        previousInteractionId = data.id;
-        localStorage.setItem(STORAGE.interaction, data.id);
-        localStorage.setItem(STORAGE.interactionModel, currentModel);
-      }
+        if (type === "step.delta" && event.delta?.type === "text") {
+          const part = event.delta.text || "";
 
-      const answer = extractText(data);
+          if (part) {
+            answer += part;
+            onText(answer);
+            typing.textContent = "AOI IA está respondendo...";
+          }
+        }
 
-      if (!answer) {
+        if (type === "interaction.completed") {
+          completedId =
+            event.interaction?.id ||
+            completedId;
+
+          completedStatus =
+            event.interaction?.status || "";
+        }
+      });
+
+      if (!answer.trim()) {
+        if (completedStatus && completedStatus !== "completed") {
+          throw new Error(
+            "A interação terminou com status: " + completedStatus
+          );
+        }
+
         throw new Error(
-          "A API respondeu, mas não encontrei o texto. Tente novamente."
+          "A API terminou a solicitação sem retornar texto. Tente novamente."
         );
       }
 
-      return answer;
+      if (completedId && completedStatus === "completed") {
+        previousInteractionId = completedId;
+
+        localStorage.setItem(
+          STORAGE.interaction,
+          completedId
+        );
+
+        localStorage.setItem(
+          STORAGE.interactionModel,
+          currentModel
+        );
+      }
+
+      return answer.trim();
+    }
+
+    async function askGemini(userText, onText) {
+      const hadPreviousId = Boolean(previousInteractionId);
+
+      try {
+        return await streamGemini(
+          userText,
+          onText,
+          hadPreviousId
+        );
+      } catch (error) {
+        // Se o ID antigo da conversa expirou, tenta uma vez sem esse ID,
+        // usando o histórico local para fornecer o contexto.
+        const looksLikeOldInteraction =
+          /previous_interaction_id|interaction.*not found|invalid.*interaction/i
+            .test(error.message || "");
+
+        if (
+          hadPreviousId &&
+          error.httpStatus >= 400 &&
+          looksLikeOldInteraction
+        ) {
+          previousInteractionId = "";
+
+          localStorage.removeItem(STORAGE.interaction);
+          localStorage.removeItem(STORAGE.interactionModel);
+
+          return await streamGemini(
+            userText,
+            onText,
+            false
+          );
+        }
+
+        throw error;
+      }
     }
 
     $("#chatForm").addEventListener("submit", async event => {
@@ -997,29 +1197,61 @@ Se não souber algo, seja honesto.
       if (!userText) return;
 
       hideNotice();
+
       addMessage("user", userText);
+
       promptBox.value = "";
       resizePrompt();
+
+      // Resposta local instantânea para saudações simples.
+      if (isSimpleGreeting(userText)) {
+        addMessage(
+          "assistant",
+          "Olá! 👋 Tudo bem? Sou a AOI IA. Como posso te ajudar hoje?"
+        );
+
+        promptBox.focus();
+        return;
+      }
+
       setBusy(true);
+      typing.textContent = "Conectando ao Gemini...";
+
+      const answerEntry = createStreamingMessage();
 
       try {
-        const answer = await askGemini(userText);
-        addMessage("assistant", answer);
+        const answer = await askGemini(
+          userText,
+          text => updateStreamingMessage(answerEntry, text)
+        );
+
+        updateStreamingMessage(answerEntry, answer);
+        saveMessages();
       } catch (error) {
         console.error("[AOI IA] Erro:", error);
 
         const detail = error?.message || "Erro desconhecido.";
 
-        showNotice("Não foi possível responder: " + detail);
+        if (!answerEntry.record.text) {
+          updateStreamingMessage(
+            answerEntry,
+            "Não consegui responder desta vez.\n\n" +
+            "Confira sua chave da API, o modelo escolhido e os limites da conta.\n\n" +
+            "Detalhe: " + detail
+          );
+        } else {
+          updateStreamingMessage(
+            answerEntry,
+            answerEntry.record.text +
+            "\n\n[O fluxo foi interrompido: " + detail + "]"
+          );
+        }
 
-        addMessage(
-          "assistant",
-          "Não consegui responder desta vez.\n\n" +
-          "Confira o modelo selecionado, a chave da API e os limites da sua conta.\n\n" +
-          "Detalhe: " + detail
-        );
+        saveMessages();
+        showNotice("Não foi possível completar a resposta: " + detail);
       } finally {
         setBusy(false);
+        typing.textContent = "Conectando ao Gemini...";
         promptBox.focus();
       }
     });
@@ -1028,7 +1260,7 @@ Se não souber algo, seja honesto.
     updateModelBadge();
     renderHistory();
 
-    // Se ainda não há chave, abre a configuração automaticamente.
+    // Abre as configurações se ainda não existe uma chave salva.
     if (!getApiKey()) {
       setTimeout(openSettings, 350);
     }
