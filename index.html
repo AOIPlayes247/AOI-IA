@@ -4,143 +4,185 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="theme-color" content="#090909">
+  <meta name="theme-color" content="#212121">
   <title>AOI IA</title>
 
   <style>
     :root {
-      --bg: #090909;
-      --panel: #141414;
-      --panel2: #202020;
+      --bg: #212121;
+      --panel: #2f2f2f;
+      --panel-hover: #383838;
       --red: #ff2020;
       --text: #f5f5f5;
-      --muted: #a4a4a4;
-      --border: #303030;
+      --muted: #a0a0a0;
+      --border: #424242;
+      --content-width: 820px;
     }
 
     * { box-sizing: border-box; }
+
+    html {
+      min-height: 100%;
+      scroll-behavior: smooth;
+    }
 
     body {
       margin: 0;
       min-height: 100vh;
       background: var(--bg);
       color: var(--text);
-      font-family: Arial, Helvetica, sans-serif;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont,
+        "Segoe UI", sans-serif;
+      -webkit-font-smoothing: antialiased;
     }
 
     button, input, textarea, select { font: inherit; }
     button { cursor: pointer; }
 
+    button:focus-visible,
+    textarea:focus-visible,
+    input:focus-visible,
+    select:focus-visible {
+      outline: 2px solid var(--red);
+      outline-offset: 3px;
+    }
+
+    [hidden] { display: none !important; }
+
     header {
       position: sticky;
       top: 0;
-      z-index: 5;
+      z-index: 10;
       display: flex;
       align-items: center;
       justify-content: space-between;
       gap: 12px;
-      padding: 14px 20px;
-      background: #090909f5;
-      border-bottom: 1px solid var(--border);
+      min-height: 66px;
+      padding: 10px 20px;
+      background: #212121ed;
+      backdrop-filter: blur(14px);
+      border-bottom: 1px solid #ffffff0b;
     }
 
     .brand {
       display: flex;
       align-items: center;
       gap: 11px;
-      font-size: 20px;
-      font-weight: 800;
+      font-size: 18px;
+      font-weight: 750;
     }
 
     .logo {
       display: grid;
       place-items: center;
-      width: 42px;
-      height: 42px;
+      width: 40px;
+      height: 40px;
+      flex-shrink: 0;
       color: white;
-      background: var(--red);
+      background: linear-gradient(135deg, #ff3535, #990000);
       border-radius: 12px;
-      box-shadow: 0 0 20px #ff202033;
+      box-shadow: 0 0 18px #ff20202b;
+      font-size: 13px;
+      font-weight: 900;
     }
 
     .brand small {
       display: block;
-      margin-top: 3px;
+      margin-top: 2px;
       color: var(--muted);
       font-size: 11px;
-      font-weight: normal;
+      font-weight: 400;
     }
 
     .actions {
       display: flex;
-      gap: 8px;
+      align-items: center;
+      gap: 7px;
     }
 
     .btn {
-      padding: 10px 12px;
+      padding: 9px 12px;
       color: var(--text);
-      background: var(--panel2);
+      background: transparent;
       border: 1px solid var(--border);
       border-radius: 10px;
+      transition: background .2s, border-color .2s;
     }
 
-    .btn:hover { border-color: var(--red); }
+    .btn:hover {
+      background: var(--panel);
+      border-color: var(--red);
+    }
 
     .led {
-      height: 3px;
+      position: relative;
+      height: 2px;
+      overflow: hidden;
+      background: #ffffff08;
+    }
+
+    .led::after {
+      position: absolute;
+      top: 0;
+      left: -40%;
+      width: 40%;
+      height: 100%;
+      content: "";
       background: linear-gradient(
         90deg, transparent, var(--red), white, var(--red), transparent
       );
-      background-size: 200% 100%;
+      box-shadow: 0 0 14px var(--red);
       animation: ledMove 4s linear infinite;
-      box-shadow: 0 0 12px #ff202088;
     }
 
     @keyframes ledMove {
-      from { background-position: 200% 0; }
-      to { background-position: -200% 0; }
+      from { left: -40%; }
+      to { left: 110%; }
     }
 
     main {
       display: flex;
       flex-direction: column;
       width: 100%;
-      max-width: 950px;
-      min-height: calc(100vh - 110px);
-      margin: auto;
-      padding: 22px 16px 12px;
+      max-width: var(--content-width);
+      min-height: calc(100dvh - 120px);
+      margin: 0 auto;
+      padding: 22px 24px 12px;
     }
 
     .welcome {
-      padding: 48px 10px 28px;
+      margin: auto 0 24px;
+      padding: 40px 10px 26px;
       text-align: center;
     }
 
     .welcome-logo {
       display: grid;
       place-items: center;
-      width: 72px;
-      height: 72px;
-      margin: 0 auto 20px;
-      border-radius: 22px;
-      background: linear-gradient(135deg, #ff3030, #920000);
+      width: 66px;
+      height: 66px;
+      margin: 0 auto 22px;
+      color: white;
+      background: linear-gradient(135deg, #ff3535, #8d0000);
+      border-radius: 21px;
       box-shadow: 0 0 38px #ff202025;
-      font-size: 25px;
+      font-size: 22px;
       font-weight: 900;
     }
 
     .welcome h1 {
       margin: 0 0 12px;
-      font-size: clamp(27px, 5vw, 42px);
+      font-size: clamp(27px, 5vw, 38px);
+      letter-spacing: -1px;
     }
 
     .red { color: var(--red); }
 
     .welcome p {
-      max-width: 520px;
+      max-width: 490px;
       margin: auto;
-      color: var(--muted);
-      line-height: 1.65;
+      color: #b4b4b4;
+      line-height: 1.7;
     }
 
     .suggestions {
@@ -149,81 +191,99 @@
       gap: 10px;
       width: 100%;
       max-width: 650px;
-      margin: 0 auto 25px;
+      margin: 0 auto 24px;
     }
 
     .suggestion {
-      padding: 15px;
-      color: var(--text);
-      background: var(--panel);
-      border: 1px solid var(--border);
-      border-radius: 12px;
+      min-height: 68px;
+      padding: 14px;
+      color: #eaeaea;
+      background: transparent;
+      border: 1px solid #484848;
+      border-radius: 14px;
       text-align: left;
       line-height: 1.5;
+      transition: background .2s, border-color .2s;
     }
 
-    .suggestion:hover { border-color: var(--red); }
+    .suggestion:hover {
+      background: #2b2b2b;
+      border-color: #777;
+    }
 
     #chat {
       display: flex;
       flex-direction: column;
-      gap: 22px;
-      padding-bottom: 18px;
+      gap: 26px;
+      padding: 12px 0 25px;
     }
 
     .message {
       display: flex;
       align-items: flex-start;
-      gap: 10px;
+      min-width: 0;
+      gap: 12px;
+      animation: messageIn .18s ease-out;
     }
 
-    .message.user { flex-direction: row-reverse; }
+    @keyframes messageIn {
+      from { opacity: 0; transform: translateY(4px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .message.user {
+      justify-content: flex-end;
+    }
 
     .avatar {
-      display: grid;
-      place-items: center;
-      width: 35px;
-      height: 35px;
-      min-width: 35px;
-      border-radius: 10px;
-      background: var(--red);
-      color: white;
-      font-size: 11px;
-      font-weight: bold;
+      display: none;
     }
-
-    .user .avatar { background: #333; }
 
     .message-content {
       min-width: 0;
-      max-width: calc(100% - 45px);
+      max-width: 100%;
+      flex: 1;
     }
 
     .message-name {
-      margin: 2px 0 7px;
-      color: var(--muted);
-      font-size: 12px;
+      margin: 0 0 8px;
+      color: #c4c4c4;
+      font-size: 13px;
+      font-weight: 600;
     }
 
+    .user .message-content {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-end;
+      flex: 0 1 auto;
+      max-width: 85%;
+    }
+
+    .user .message-name { display: none; }
+
     .bubble {
-      padding: 13px 15px;
-      background: var(--panel);
-      border: 1px solid var(--border);
-      border-radius: 4px 14px 14px 14px;
-      line-height: 1.65;
+      color: #ededed;
+      background: transparent;
+      border: 0;
+      border-radius: 0;
+      line-height: 1.8;
       white-space: pre-wrap;
       overflow-wrap: anywhere;
     }
 
     .user .bubble {
-      background: #251010;
-      border-color: #512020;
-      border-radius: 14px 4px 14px 14px;
+      padding: 11px 16px;
+      color: #f5f5f5;
+      background: #303030;
+      border-radius: 22px;
+      line-height: 1.65;
     }
 
     .copy-btn {
-      padding: 7px 0 0;
-      color: var(--muted);
+      margin-top: 8px;
+      padding: 5px 0;
+      color: #999;
       background: transparent;
       border: 0;
       font-size: 12px;
@@ -232,57 +292,74 @@
     .copy-btn:hover { color: white; }
 
     .typing {
-      margin: 8px 0;
-      color: var(--muted);
+      margin: 4px 0 12px;
+      color: #b0b0b0;
       font-size: 13px;
     }
 
     .composer-area {
       position: sticky;
       bottom: 0;
+      z-index: 4;
       margin-top: auto;
       padding: 18px 0 10px;
-      background: linear-gradient(transparent, var(--bg) 20%);
+      background: linear-gradient(
+        to bottom, #21212100 0%, #212121f5 18%, #212121 38%
+      );
     }
 
     .composer {
       display: flex;
       align-items: flex-end;
       gap: 10px;
-      padding: 10px;
-      background: var(--panel);
-      border: 1px solid #393939;
-      border-radius: 17px;
+      padding: 9px 10px 9px 17px;
+      background: #303030;
+      border: 1px solid #454545;
+      border-radius: 25px;
+      box-shadow: 0 3px 16px #00000012;
+      transition: border-color .2s, box-shadow .2s;
     }
 
-    .composer:focus-within { border-color: #a52a2a; }
+    .composer:focus-within {
+      border-color: #686868;
+      box-shadow: 0 0 0 1px #ffffff08;
+    }
 
     #prompt {
       flex: 1;
       min-width: 0;
-      min-height: 42px;
+      min-height: 44px;
       max-height: 180px;
       resize: none;
-      padding: 11px 8px;
+      padding: 11px 0;
       color: var(--text);
       background: transparent;
       border: 0;
       outline: 0;
-      line-height: 1.5;
+      line-height: 1.55;
     }
 
-    #prompt::placeholder { color: #888; }
+    #prompt::placeholder { color: #aaa; }
+    #prompt:disabled { opacity: .65; }
 
     #send {
-      width: 44px;
-      height: 44px;
+      display: grid;
+      place-items: center;
+      width: 42px;
+      height: 42px;
       flex-shrink: 0;
       color: white;
       background: var(--red);
       border: 0;
-      border-radius: 12px;
-      font-size: 19px;
-      font-weight: bold;
+      border-radius: 50%;
+      font-size: 20px;
+      font-weight: 700;
+      transition: transform .15s, background .15s;
+    }
+
+    #send:hover:not(:disabled) {
+      background: #e01818;
+      transform: scale(1.04);
     }
 
     #send:disabled {
@@ -292,7 +369,8 @@
 
     .hint {
       margin-top: 10px;
-      color: #777;
+      padding: 0 8px;
+      color: #969696;
       font-size: 11px;
       line-height: 1.6;
       text-align: center;
@@ -300,8 +378,8 @@
 
     footer {
       padding: 15px;
-      color: #777;
-      border-top: 1px solid var(--border);
+      color: #888;
+      border-top: 1px solid #ffffff0b;
       text-align: center;
       font-size: 11px;
     }
@@ -313,11 +391,11 @@
       margin-bottom: 14px;
       padding: 12px 14px;
       color: #ffd2d2;
-      background: #260e0e;
-      border: 1px solid #673030;
-      border-radius: 10px;
+      background: #351515;
+      border: 1px solid #713030;
+      border-radius: 12px;
       font-size: 13px;
-      line-height: 1.5;
+      line-height: 1.6;
       overflow-wrap: anywhere;
     }
 
@@ -326,12 +404,13 @@
     .modal-backdrop {
       position: fixed;
       inset: 0;
-      z-index: 20;
+      z-index: 30;
       display: none;
       align-items: center;
       justify-content: center;
       padding: 16px;
-      background: #000c;
+      background: #000b;
+      backdrop-filter: blur(5px);
     }
 
     .modal-backdrop.open { display: flex; }
@@ -339,44 +418,47 @@
     .modal {
       width: 100%;
       max-width: 490px;
-      max-height: 90vh;
+      max-height: 90dvh;
       overflow-y: auto;
-      padding: 22px;
-      background: #121212;
-      border: 1px solid #393939;
+      padding: 23px;
+      background: #262626;
+      border: 1px solid #494949;
       border-radius: 18px;
       box-shadow: 0 20px 70px #0009;
     }
 
-    .modal h2 { margin: 0 0 10px; }
+    .modal h2 {
+      margin: 0 0 10px;
+      font-size: 21px;
+    }
 
     .modal p {
-      color: var(--muted);
+      color: #b5b5b5;
       font-size: 13px;
-      line-height: 1.6;
+      line-height: 1.7;
     }
 
     .modal label {
       display: block;
       margin: 17px 0 7px;
       font-size: 13px;
-      font-weight: bold;
+      font-weight: 650;
     }
 
-    .modal input, .modal select {
+    .modal input,
+    .modal select {
       display: block;
       width: 100%;
       padding: 12px;
       color: white;
-      background: #090909;
-      border: 1px solid #393939;
+      background: #191919;
+      border: 1px solid #454545;
       border-radius: 10px;
       outline: none;
     }
 
-    .modal input:focus, .modal select:focus {
-      border-color: var(--red);
-    }
+    .modal input:focus,
+    .modal select:focus { border-color: var(--red); }
 
     .modal-actions {
       display: flex;
@@ -394,16 +476,34 @@
       border-radius: 10px;
     }
 
+    .primary:hover { background: #df1717; }
     .danger { color: #ffaaaa; }
 
     @media (max-width: 560px) {
-      header { padding: 12px; }
-      .brand { gap: 8px; font-size: 17px; }
-      .logo { width: 36px; height: 36px; }
-      .btn { padding: 9px; font-size: 12px; }
-      main { padding: 12px; }
-      .welcome { padding: 38px 5px 26px; }
-      .suggestions { grid-template-columns: 1fr; }
+      header { padding: 10px 12px; }
+      .brand { gap: 8px; font-size: 16px; }
+      .logo { width: 35px; height: 35px; }
+      .brand small { font-size: 10px; }
+      .actions { gap: 5px; }
+      .btn { padding: 8px 9px; font-size: 11px; }
+      main { padding: 12px 14px; }
+      .welcome { padding: 34px 5px 24px; }
+      .welcome-logo { width: 58px; height: 58px; }
+      .suggestions { grid-template-columns: 1fr; gap: 8px; }
+      .suggestion { min-height: 55px; padding: 12px; }
+      #chat { gap: 22px; }
+      .user .message-content { max-width: 92%; }
+      .composer { padding-left: 13px; }
+      .hint { font-size: 10px; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after {
+        scroll-behavior: auto !important;
+        animation-duration: .01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: .01ms !important;
+      }
     }
   </style>
 </head>
@@ -439,18 +539,21 @@
     </section>
 
     <section class="suggestions" id="suggestions">
-      <button class="suggestion" data-prompt="Me ajude a criar um jogo no Roblox Studio." type="button">
-        🎮 Me ajude com Roblox Studio
-      </button>
-      <button class="suggestion" data-prompt="Me ensine HTML, CSS e JavaScript desde o começo." type="button">
-        💻 Aprender programação
-      </button>
-      <button class="suggestion" data-prompt="Me dê ideias para vídeos de games no YouTube." type="button">
-        🎬 Ideias para vídeos
-      </button>
-      <button class="suggestion" data-prompt="Explique um assunto difícil de forma simples, com exemplos." type="button">
-        💡 Aprender algo novo
-      </button>
+      <button class="suggestion"
+        data-prompt="Me ajude a criar um jogo no Roblox Studio."
+        type="button">🎮 Me ajude com Roblox Studio</button>
+
+      <button class="suggestion"
+        data-prompt="Me ensine HTML, CSS e JavaScript desde o começo."
+        type="button">💻 Aprender programação</button>
+
+      <button class="suggestion"
+        data-prompt="Me dê ideias para vídeos de games no YouTube."
+        type="button">🎬 Ideias para vídeos</button>
+
+      <button class="suggestion"
+        data-prompt="Explique um assunto difícil de forma simples, com exemplos."
+        type="button">💡 Aprender algo novo</button>
     </section>
 
     <section id="chat" aria-live="polite"></section>
@@ -461,7 +564,8 @@
         <textarea id="prompt" rows="1"
           placeholder="Escreva sua mensagem para a AOI IA..."
           aria-label="Sua mensagem"></textarea>
-        <button id="send" type="submit" aria-label="Enviar mensagem">➤</button>
+        <button id="send" type="submit"
+          aria-label="Enviar mensagem">➤</button>
       </form>
 
       <div class="hint">
@@ -474,7 +578,7 @@
   <footer>Feito para <strong>AOIofc1</strong> · AOI IA</footer>
 
   <div class="modal-backdrop" id="settingsModal"
-       role="dialog" aria-modal="true" aria-labelledby="settingsTitle">
+    role="dialog" aria-modal="true" aria-labelledby="settingsTitle">
     <div class="modal">
       <h2 id="settingsTitle">⚙ Configurações da AOI IA</h2>
       <p>Configure sua chave da API e escolha o modelo.</p>
@@ -488,9 +592,8 @@
       <select id="modelSelect"></select>
 
       <p>
-        Para priorizar a velocidade, comece com Gemini 3.8 Flash.
-        Gemini 3.5 Flash-Lite pode ser uma alternativa mais leve,
-        se estiver disponível para sua conta.
+        Escolha um modelo disponível na sua conta Gemini.
+        Modelos mais leves podem ser mais rápidos em tarefas simples.
       </p>
 
       <p>
@@ -509,20 +612,6 @@
 
   <script>
     "use strict";
-
-    /*
-      AOI IA — versão com streaming de respostas.
-
-      API:
-      POST https://generativelanguage.googleapis.com/v1beta/interactions
-
-      Melhorias:
-      - stream: true: mostra o texto conforme a API o envia.
-      - thinking_level: low: reduz o esforço de raciocínio.
-      - limite de saída para controlar respostas longas.
-      - modelo 2.5 antigo é migrado para 3.8 Flash.
-      - histórico continua usando previous_interaction_id.
-    */
 
     const API_URL =
       "https://generativelanguage.googleapis.com/v1beta/interactions";
@@ -544,7 +633,7 @@
       },
       {
         id: "gemini-3.1-pro-preview",
-        label: "Gemini 3.1 Pro Preview — mais raciocínio"
+        label: "Gemini 3.1 Pro Preview — raciocínio"
       }
     ];
 
@@ -586,13 +675,11 @@
 
         if (!Array.isArray(saved)) return [];
 
-        return saved
-          .filter(item =>
-            item &&
-            (item.role === "user" || item.role === "assistant") &&
-            typeof item.text === "string"
-          )
-          .slice(-60);
+        return saved.filter(item =>
+          item &&
+          (item.role === "user" || item.role === "assistant") &&
+          typeof item.text === "string"
+        ).slice(-60);
       } catch {
         return [];
       }
@@ -600,8 +687,6 @@
 
     function loadModel() {
       const saved = localStorage.getItem(STORAGE.model) || "";
-
-      // Qualquer modelo antigo ou desconhecido volta ao padrão rápido.
       const exists = MODELS.some(model => model.id === saved);
       const chosen = exists ? saved : DEFAULT_MODEL;
 
@@ -619,11 +704,7 @@
     const savedInteractionModel =
       localStorage.getItem(STORAGE.interactionModel) || "";
 
-    // Não reutiliza uma interação feita com outro modelo.
-    if (
-      previousInteractionId &&
-      savedInteractionModel !== currentModel
-    ) {
+    if (previousInteractionId && savedInteractionModel !== currentModel) {
       previousInteractionId = "";
       localStorage.removeItem(STORAGE.interaction);
       localStorage.removeItem(STORAGE.interactionModel);
@@ -729,8 +810,6 @@
       row.append(avatar, content);
       chat.appendChild(row);
 
-      row.scrollIntoView({ behavior: "smooth", block: "nearest" });
-
       return { row, bubble };
     }
 
@@ -739,7 +818,6 @@
       messages.push(record);
 
       const elements = renderMessage(record);
-
       saveMessages();
       updateWelcome();
 
@@ -760,7 +838,6 @@
       entry.record.text = fullText;
       entry.bubble.textContent = fullText;
 
-      // Mantém o trecho que está sendo gerado visível.
       entry.row.scrollIntoView({
         behavior: "auto",
         block: "nearest"
@@ -803,6 +880,10 @@
       if (event.target === settingsModal) closeSettings();
     });
 
+    document.addEventListener("keydown", event => {
+      if (event.key === "Escape") closeSettings();
+    });
+
     $("#saveSettings").addEventListener("click", () => {
       const key = apiKeyInput.value.trim();
       const selectedModel = modelSelect.value;
@@ -823,7 +904,6 @@
         currentModel = selectedModel;
         localStorage.setItem(STORAGE.model, currentModel);
 
-        // Uma conversa encadeada com outro modelo não deve ser reutilizada.
         previousInteractionId = "";
         localStorage.removeItem(STORAGE.interaction);
         localStorage.removeItem(STORAGE.interactionModel);
@@ -831,8 +911,6 @@
 
       updateModelBadge();
       closeSettings();
-      hideNotice();
-
       showNotice("Configuração salva: " + modelLabel(currentModel));
     });
 
@@ -860,6 +938,7 @@
       hideNotice();
       updateWelcome();
       promptBox.value = "";
+      resizePrompt();
       promptBox.focus();
     });
 
@@ -886,7 +965,6 @@
       }
     });
 
-    // Saudações básicas não precisam esperar uma chamada à API.
     function isSimpleGreeting(text) {
       const normalized = text
         .toLocaleLowerCase("pt-BR")
@@ -897,20 +975,11 @@
         .replace(/\s+/g, " ");
 
       return [
-        "oi",
-        "ola",
-        "opa",
-        "eai",
-        "e ae",
-        "bom dia",
-        "boa tarde",
-        "boa noite",
-        "tudo bem"
+        "oi", "ola", "opa", "eai", "e ae",
+        "bom dia", "boa tarde", "boa noite", "tudo bem"
       ].includes(normalized);
     }
 
-    // Se a conversa ainda não tem ID de interação, envia um contexto
-    // curto com o histórico local, em vez de perder as mensagens antigas.
     function buildContextInput(userText) {
       let currentIndex = -1;
 
@@ -930,9 +999,7 @@
           : messages
       ).slice(-10);
 
-      if (!earlierMessages.length) {
-        return userText;
-      }
+      if (!earlierMessages.length) return userText;
 
       const history = earlierMessages.map(message => {
         const speaker = message.role === "user" ? "Usuário" : "AOI IA";
@@ -951,14 +1018,8 @@
         input: usePreviousInteraction
           ? userText
           : buildContextInput(userText),
-
         system_instruction: SYSTEM_INSTRUCTION,
-
-        // O streaming permite que a interface mostre o texto
-        // antes de a resposta inteira terminar.
         stream: true,
-
-        // Configuração voltada para respostas mais rápidas.
         generation_config: {
           thinking_level: "low",
           max_output_tokens: 4096
@@ -981,19 +1042,14 @@
     async function readErrorResponse(response) {
       try {
         const data = await response.json();
-        return (
-          data?.error?.message ||
+        return data?.error?.message ||
           data?.message ||
-          ("Erro HTTP " + response.status)
-        );
+          ("Erro HTTP " + response.status);
       } catch {
         return "Erro HTTP " + response.status;
       }
     }
 
-    // Lê um evento SSE do formato:
-    // event: step.delta
-    // data: {"event_type":"step.delta", ...}
     function parseSSEBlock(block, onEvent) {
       const data = block
         .split(/\r?\n/)
@@ -1004,16 +1060,12 @@
 
       if (!data || data === "[DONE]") return;
 
-      let event;
-
       try {
-        event = JSON.parse(data);
-      } catch {
-        // Ignora blocos incompletos ou que não sejam JSON válido.
-        return;
+        onEvent(JSON.parse(data));
+      } catch (error) {
+        if (error instanceof SyntaxError) return;
+        throw error;
       }
-
-      onEvent(event);
     }
 
     async function consumeSSE(response, onEvent) {
@@ -1023,13 +1075,11 @@
 
       const reader = response.body.getReader();
       const decoder = new TextDecoder();
-
       let buffer = "";
 
       try {
         while (true) {
           const { value, done } = await reader.read();
-
           if (done) break;
 
           buffer += decoder.decode(value, { stream: true });
@@ -1038,17 +1088,13 @@
           buffer = blocks.pop() || "";
 
           for (const block of blocks) {
-            if (block.trim()) {
-              parseSSEBlock(block, onEvent);
-            }
+            if (block.trim()) parseSSEBlock(block, onEvent);
           }
         }
 
         buffer += decoder.decode();
 
-        if (buffer.trim()) {
-          parseSSEBlock(buffer, onEvent);
-        }
+        if (buffer.trim()) parseSSEBlock(buffer, onEvent);
       } finally {
         reader.releaseLock();
       }
@@ -1062,13 +1108,7 @@
         throw new Error("Configure sua chave da API Gemini nas configurações.");
       }
 
-      const body = makeRequestBody(
-        userText,
-        usePreviousInteraction
-      );
-
-      console.info("[AOI IA] Modelo enviado:", currentModel);
-      console.info("[AOI IA] Streaming ativado; raciocínio low.");
+      const body = makeRequestBody(userText, usePreviousInteraction);
 
       const response = await fetch(API_URL, {
         method: "POST",
@@ -1081,8 +1121,10 @@
       });
 
       if (!response.ok) {
-        const message = await readErrorResponse(response);
-        throw createHttpError(response.status, message);
+        throw createHttpError(
+          response.status,
+          await readErrorResponse(response)
+        );
       }
 
       let answer = "";
@@ -1113,20 +1155,14 @@
         }
 
         if (type === "interaction.completed") {
-          completedId =
-            event.interaction?.id ||
-            completedId;
-
-          completedStatus =
-            event.interaction?.status || "";
+          completedId = event.interaction?.id || completedId;
+          completedStatus = event.interaction?.status || "";
         }
       });
 
       if (!answer.trim()) {
         if (completedStatus && completedStatus !== "completed") {
-          throw new Error(
-            "A interação terminou com status: " + completedStatus
-          );
+          throw new Error("A interação terminou com status: " + completedStatus);
         }
 
         throw new Error(
@@ -1136,16 +1172,8 @@
 
       if (completedId && completedStatus === "completed") {
         previousInteractionId = completedId;
-
-        localStorage.setItem(
-          STORAGE.interaction,
-          completedId
-        );
-
-        localStorage.setItem(
-          STORAGE.interactionModel,
-          currentModel
-        );
+        localStorage.setItem(STORAGE.interaction, completedId);
+        localStorage.setItem(STORAGE.interactionModel, currentModel);
       }
 
       return answer.trim();
@@ -1155,14 +1183,8 @@
       const hadPreviousId = Boolean(previousInteractionId);
 
       try {
-        return await streamGemini(
-          userText,
-          onText,
-          hadPreviousId
-        );
+        return await streamGemini(userText, onText, hadPreviousId);
       } catch (error) {
-        // Se o ID antigo da conversa expirou, tenta uma vez sem esse ID,
-        // usando o histórico local para fornecer o contexto.
         const looksLikeOldInteraction =
           /previous_interaction_id|interaction.*not found|invalid.*interaction/i
             .test(error.message || "");
@@ -1173,15 +1195,10 @@
           looksLikeOldInteraction
         ) {
           previousInteractionId = "";
-
           localStorage.removeItem(STORAGE.interaction);
           localStorage.removeItem(STORAGE.interactionModel);
 
-          return await streamGemini(
-            userText,
-            onText,
-            false
-          );
+          return await streamGemini(userText, onText, false);
         }
 
         throw error;
@@ -1190,26 +1207,22 @@
 
     $("#chatForm").addEventListener("submit", async event => {
       event.preventDefault();
-
       if (busy) return;
 
       const userText = promptBox.value.trim();
       if (!userText) return;
 
       hideNotice();
-
       addMessage("user", userText);
 
       promptBox.value = "";
       resizePrompt();
 
-      // Resposta local instantânea para saudações simples.
       if (isSimpleGreeting(userText)) {
         addMessage(
           "assistant",
           "Olá! 👋 Tudo bem? Sou a AOI IA. Como posso te ajudar hoje?"
         );
-
         promptBox.focus();
         return;
       }
@@ -1260,7 +1273,6 @@
     updateModelBadge();
     renderHistory();
 
-    // Abre as configurações se ainda não existe uma chave salva.
     if (!getApiKey()) {
       setTimeout(openSettings, 350);
     }
