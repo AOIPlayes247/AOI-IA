@@ -1,828 +1,699 @@
+
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>AOI IA</title>
-
-<link href="https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@500;700&family=JetBrains+Mono&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark.min.css">
-
+<meta name="theme-color" content="#0b0b0f">
 <style>
 :root {
-  --bg: #050505;
-  --panel: #141414;
-  --line: #303030;
-  --red: #e10600;
-  --red2: #ff3b30;
-  --txt: #fff;
-  --mut: #aaa;
+  --bg:#09090d;
+  --panel:#111117;
+  --panel2:#191920;
+  --border:#292932;
+  --text:#f5f5f7;
+  --muted:#9b9ba8;
+  --red:#ff303b;
+  --red2:#bd1522;
 }
-
-* { box-sizing: border-box; }
-
-html, body {
-  height: 100%;
-  margin: 0;
-}
-
+* { box-sizing:border-box; }
 body {
-  background: var(--bg);
-  color: var(--txt);
-  font: 16px/1.6 system-ui, sans-serif;
-  display: flex;
-  flex-direction: column;
+  margin:0;
+  background:var(--bg);
+  color:var(--text);
+  font-family:Inter,system-ui,Arial,sans-serif;
+  height:100dvh;
+  overflow:hidden;
 }
-
-header {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  padding: 12px 16px;
-  border-bottom: 2px solid var(--red);
-  flex-wrap: wrap;
+button,input,textarea,select { font:inherit; }
+button { cursor:pointer; }
+.app { display:flex;height:100dvh; }
+.sidebar {
+  width:270px;flex-shrink:0;background:#0e0e13;
+  border-right:1px solid var(--border);
+  display:flex;flex-direction:column;padding:18px;gap:15px;
 }
-
-h1 {
-  font: 700 23px 'Chakra Petch', sans-serif;
-  margin: 0;
-  flex: 1;
+.brand { display:flex;align-items:center;gap:11px;font-size:21px;font-weight:850; }
+.logo {
+  width:42px;height:42px;border-radius:13px;
+  display:grid;place-items:center;
+  background:linear-gradient(135deg,var(--red),#8d0915);
+  box-shadow:0 0 22px #ff303b33;font-weight:950;
 }
-
-h1 span { color: var(--red2); }
-
-button {
-  font: inherit;
-  cursor: pointer;
-  color: white;
-  background: var(--panel);
-  border: 1px solid var(--line);
-  border-radius: 7px;
-  padding: 7px 12px;
+.brand small { display:block;color:var(--muted);font-size:11px;font-weight:500; }
+.new-chat,.side-button {
+  background:var(--panel2);border:1px solid var(--border);
+  border-radius:11px;color:var(--text);padding:12px;text-align:left;
 }
-
-button:hover { border-color: var(--red); }
-
-button:disabled {
-  opacity: .5;
-  cursor: not-allowed;
+.new-chat:hover,.side-button:hover { border-color:var(--red); }
+.section-label {
+  font-size:11px;color:var(--muted);font-weight:800;
+  letter-spacing:1.2px;margin-top:7px;
 }
-
-#status {
-  display: none;
-  padding: 7px 16px;
-  color: var(--mut);
-  font-size: 13px;
-  border-bottom: 1px solid var(--line);
+.history { flex:1;overflow:auto;display:flex;flex-direction:column;gap:6px; }
+.history-item {
+  border:0;background:transparent;color:#c9c9d1;
+  padding:10px;border-radius:9px;text-align:left;
+  overflow:hidden;text-overflow:ellipsis;white-space:nowrap;
 }
-
-#log {
-  flex: 1;
-  overflow-y: auto;
-  padding: 18px;
-  display: flex;
-  flex-direction: column;
-  gap: 18px;
-  max-width: 950px;
-  width: 100%;
-  margin: 0 auto;
+.history-item:hover { background:var(--panel2); }
+.sidebar-bottom { display:grid;gap:8px; }
+.main { flex:1;min-width:0;display:flex;flex-direction:column; }
+.topbar {
+  height:65px;border-bottom:1px solid var(--border);
+  display:flex;align-items:center;justify-content:space-between;
+  padding:0 22px;gap:12px;
 }
-
-.msg { max-width: 100%; }
-
-.user {
-  align-self: flex-end;
-  background: var(--red);
-  padding: 9px 14px;
-  border-radius: 14px 14px 2px 14px;
-  max-width: 85%;
-  white-space: pre-wrap;
-  overflow-wrap: anywhere;
+.top-title { font-weight:750; }
+.top-actions { display:flex;gap:8px; }
+.icon-button {
+  border:1px solid var(--border);background:var(--panel);
+  color:var(--text);border-radius:10px;padding:9px 12px;
 }
-
-.bot {
-  border-left: 3px solid var(--red);
-  padding-left: 14px;
-  overflow-wrap: anywhere;
+.icon-button:hover { border-color:var(--red); }
+.content { flex:1;overflow:auto;padding:25px 18px 15px; }
+.conversation { max-width:850px;margin:auto; }
+.welcome { text-align:center;padding:9vh 10px 25px; }
+.welcome-logo {
+  width:72px;height:72px;margin:0 auto 22px;border-radius:23px;
+  display:grid;place-items:center;font-size:28px;font-weight:950;
+  background:linear-gradient(135deg,var(--red),#8d0915);
+  box-shadow:0 0 45px #ff303b24;
 }
-
-.bot p { margin: .6em 0; }
-.bot a { color: var(--red2); }
-
-.bot pre {
-  overflow: auto;
-  padding: 12px;
-  background: #101010;
-  border-radius: 8px;
+h1 { font-size:clamp(28px,5vw,43px);margin:0 0 12px;letter-spacing:-1.5px; }
+.gradient {
+  color:#ff414b;
+  background:linear-gradient(90deg,#ff5b63,#ff1828);
+  -webkit-background-clip:text;background-clip:text;
+  -webkit-text-fill-color:transparent;
 }
-
-.bot code {
-  font-family: 'JetBrains Mono', monospace;
+.subtitle { color:var(--muted);line-height:1.7; }
+.suggestions {
+  display:grid;grid-template-columns:repeat(2,minmax(0,1fr));
+  gap:10px;max-width:650px;margin:26px auto 0;
 }
-
-.note, .sources {
-  color: var(--mut);
-  font-size: 13px;
-  margin-top: 8px;
+.suggestion {
+  background:var(--panel);border:1px solid var(--border);
+  color:var(--text);border-radius:13px;padding:15px;text-align:left;
 }
-
-.err {
-  padding: 10px;
-  background: #390000;
-  border: 1px solid var(--red);
-  border-radius: 8px;
-  overflow-wrap: anywhere;
+.suggestion:hover { border-color:var(--red);background:#171117; }
+.suggestion strong { display:block;margin-bottom:5px;font-size:14px; }
+.suggestion span { color:var(--muted);font-size:12px; }
+.message { display:flex;gap:12px;margin:25px 0;align-items:flex-start; }
+.avatar {
+  width:34px;height:34px;flex-shrink:0;border-radius:11px;
+  display:grid;place-items:center;font-weight:850;font-size:12px;
+  background:var(--panel2);border:1px solid var(--border);
 }
-
-.empty {
-  color: var(--mut);
-  margin: auto;
-  text-align: center;
+.message.assistant .avatar { background:var(--red2);border-color:#e52c38; }
+.message-body { min-width:0;flex:1;line-height:1.75;overflow-wrap:anywhere; }
+.message-name { font-size:12px;color:var(--muted);margin-bottom:6px;font-weight:750; }
+.message-text { white-space:pre-wrap; }
+.message-text pre {
+  background:#07070a;border:1px solid var(--border);border-radius:10px;
+  padding:14px;overflow:auto;white-space:pre;max-width:100%;
 }
-
-.empty strong {
-  display: block;
-  color: white;
-  font: 700 32px 'Chakra Petch', sans-serif;
+.message-text code { font-family:Consolas,monospace;font-size:13px; }
+.message-text p { margin:7px 0; }
+.message-tools { display:flex;gap:7px;margin-top:10px; }
+.mini-button {
+  background:transparent;color:var(--muted);
+  border:1px solid var(--border);border-radius:8px;padding:5px 9px;font-size:12px;
 }
-
-#form {
-  display: flex;
-  gap: 8px;
-  padding: 12px 16px;
-  border-top: 1px solid var(--line);
-  max-width: 950px;
-  width: 100%;
-  margin: 0 auto;
+.mini-button:hover { color:white;border-color:var(--red); }
+.composer-area { padding:12px 18px 18px; }
+.composer { max-width:850px;margin:auto; }
+.input-box {
+  display:flex;align-items:flex-end;gap:10px;
+  background:var(--panel);border:1px solid #363640;
+  border-radius:17px;padding:12px;
 }
-
-textarea, input {
-  background: var(--panel);
-  color: white;
-  border: 1px solid #444;
-  border-radius: 8px;
-  padding: 10px;
-  font: inherit;
+.input-box:focus-within { border-color:#a52a32;box-shadow:0 0 0 2px #ff303b12; }
+#prompt {
+  width:100%;resize:none;max-height:180px;min-height:28px;
+  border:0;outline:0;background:transparent;color:var(--text);
+  line-height:1.6;padding:3px;
 }
-
-textarea {
-  flex: 1;
-  resize: none;
-  min-width: 0;
-  max-height: 160px;
+#prompt::placeholder { color:#777783; }
+.send {
+  background:var(--red);color:white;border:0;border-radius:11px;
+  width:40px;height:40px;flex-shrink:0;font-size:18px;font-weight:800;
 }
-
-#send {
-  background: var(--red);
-  border-color: var(--red);
-  font-weight: bold;
+.send:disabled { opacity:.45;cursor:not-allowed; }
+.disclaimer { text-align:center;color:#777783;font-size:11px;margin-top:10px; }
+.status { color:var(--muted);font-size:12px;margin:8px 2px;min-height:18px; }
+.overlay {
+  position:fixed;inset:0;background:#000b;display:none;
+  align-items:center;justify-content:center;padding:15px;z-index:5;
 }
-
-dialog {
-  background: var(--panel);
-  color: white;
-  border: 2px solid var(--red);
-  border-radius: 12px;
-  width: min(480px, 92%);
+.overlay.open { display:flex; }
+.modal {
+  width:min(500px,100%);max-height:90dvh;overflow:auto;
+  background:var(--panel);border:1px solid var(--border);
+  border-radius:18px;padding:22px;
 }
-
-dialog::backdrop { background: #000b; }
-
-.dialog-content { display: grid; gap: 12px; }
-
-.dialog-content input[type="text"] { width: 100%; }
-
-#memoryList {
-  list-style: none;
-  padding: 0;
-  max-height: 200px;
-  overflow-y: auto;
+.modal h2 { margin:0 0 8px; }
+.modal-desc { color:var(--muted);font-size:13px;line-height:1.6;margin-bottom:20px; }
+.field { display:grid;gap:7px;margin:16px 0; }
+.field label { font-size:13px;font-weight:750; }
+.field input,.field select {
+  width:100%;padding:12px;border:1px solid var(--border);
+  background:#09090d;color:var(--text);border-radius:10px;outline:none;
 }
-
-#memoryList li {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  gap: 8px;
-  border-bottom: 1px solid var(--line);
-  padding: 6px 0;
+.field input:focus,.field select:focus { border-color:var(--red); }
+.field-help { font-size:11px;color:var(--muted);line-height:1.6; }
+.modal-buttons { display:flex;gap:9px;justify-content:flex-end;margin-top:20px; }
+.primary,.secondary {
+  padding:10px 15px;border-radius:10px;font-weight:750;
 }
-
-.codebox {
-  border: 1px solid var(--line);
-  border-radius: 8px;
-  overflow: hidden;
-  margin: 12px 0;
+.primary { background:var(--red);border:0;color:white; }
+.secondary { background:var(--panel2);border:1px solid var(--border);color:white; }
+.warning {
+  padding:12px;border:1px solid #744b25;background:#291d12;
+  color:#ffd3a1;border-radius:10px;font-size:12px;line-height:1.6;
 }
-
-.codebar {
-  display: flex;
-  gap: 8px;
-  align-items: center;
-  padding: 7px;
-  background: #181818;
-  flex-wrap: wrap;
-}
-
-.codebar span { flex: 1; color: var(--mut); }
-
-.codebox pre {
-  margin: 0;
-  max-height: 450px;
-  overflow: auto;
-}
-
-.codebox pre code {
-  display: block;
-  padding: 12px;
-  background: #0d1117;
-  white-space: pre;
-}
-
-@media (max-width: 600px) {
-  header { padding: 10px; }
-  header button { font-size: 12px; padding: 6px 8px; }
-  #log { padding: 12px; }
-  #form { padding: 10px; }
+.empty-history { color:var(--muted);font-size:13px;padding:8px; }
+@media(max-width:700px) {
+  .sidebar { display:none; }
+  .topbar { padding:0 13px; }
+  .content { padding:15px 13px; }
+  .composer-area { padding:8px 12px 12px; }
+  .welcome { padding-top:7vh; }
+  .suggestions { grid-template-columns:1fr; }
+  .suggestion { padding:12px; }
 }
 </style>
 </head>
-
 <body>
-<header>
-  <h1>AOI <span>IA</span></h1>
-  <button id="news">Notícias</button>
-  <button id="settings">Configurações</button>
-  <button id="memory">Memória</button>
-  <button id="newChat">Nova conversa</button>
-  <button id="clearHistory">Apagar histórico</button>
-</header>
-
-<div id="status" role="status"></div>
-<main id="log" aria-live="polite"></main>
-
-<form id="form">
-  <textarea id="question" rows="1" maxlength="4000"
-    placeholder="Pergunte algo, peça um script ou faça uma conta..."
-    aria-label="Mensagem"></textarea>
-  <button id="send" type="submit">Enviar</button>
-</form>
-
-<dialog id="settingsDialog">
-  <div class="dialog-content">
-    <h2>Configurações da AOI IA</h2>
-    <p>Modo de funcionamento: Claude via backend seguro.</p>
-    <p class="note">
-      O servidor precisa estar hospedado e configurado com a variável
-      ANTHROPIC_API_KEY. A chave não deve ficar no HTML ou no GitHub.
-    </p>
-    <label>
-      <input type="checkbox" id="autoNews">
-      Pedir resumo de notícias ao abrir
-    </label>
-    <div style="display:flex;gap:8px;justify-content:flex-end">
-      <button type="button" id="closeSettings">Fechar</button>
-      <button type="button" id="saveSettings">Salvar</button>
+<div class="app">
+  <aside class="sidebar">
+    <div class="brand">
+      <div class="logo">A</div>
+      <div>AOI IA<small>Seu assistente inteligente</small></div>
     </div>
+    <button class="new-chat" id="newChat">＋ Nova conversa</button>
+    <div class="section-label">CONVERSAS RECENTES</div>
+    <div class="history" id="historyList">
+      <div class="empty-history">Suas conversas aparecerão aqui.</div>
+    </div>
+    <div class="sidebar-bottom">
+      <button class="side-button" id="settingsButton">⚙ Configurações</button>
+      <button class="side-button" id="clearHistory">♲ Limpar histórico</button>
+      <div class="field-help">AOI IA · Projeto independente</div>
+    </div>
+  </aside>
+
+  <main class="main">
+    <header class="topbar">
+      <div class="top-title">AOI <span class="gradient">IA</span></div>
+      <div class="top-actions">
+        <button class="icon-button" id="mobileNew">＋ Nova</button>
+        <button class="icon-button" id="mobileSettings">⚙ Config.</button>
+      </div>
+    </header>
+
+    <section class="content" id="content">
+      <div class="conversation" id="conversation">
+        <div class="welcome" id="welcome">
+          <div class="welcome-logo">AOI</div>
+          <h1>Olá! Eu sou a <span class="gradient">AOI IA</span></h1>
+          <p class="subtitle">Seu espaço para criar, aprender, programar e transformar ideias em realidade.</p>
+          <div class="suggestions">
+            <button class="suggestion" data-prompt="Crie um script para Roblox Studio e explique como instalar.">
+              <strong>🎮 Roblox Studio</strong><span>Crie scripts e sistemas para seus jogos.</span>
+            </button>
+            <button class="suggestion" data-prompt="Me ajude a criar um site moderno usando HTML, CSS e JavaScript.">
+              <strong>💻 Criar um site</strong><span>Transforme sua ideia em um projeto.</span>
+            </button>
+            <button class="suggestion" data-prompt="Me ensine JavaScript do zero com exemplos simples.">
+              <strong>📚 Aprender programação</strong><span>Aprenda passo a passo.</span>
+            </button>
+            <button class="suggestion" data-prompt="Me dê ideias criativas para vídeos de games no YouTube.">
+              <strong>🎬 Ideias para vídeos</strong><span>Planeje seu próximo conteúdo.</span>
+            </button>
+          </div>
+        </div>
+        <div id="messages"></div>
+      </div>
+    </section>
+
+    <div class="composer-area">
+      <div class="composer">
+        <div class="status" id="status" role="status"></div>
+        <form id="chatForm" class="input-box">
+          <textarea id="prompt" rows="1" maxlength="12000" placeholder="Pergunte qualquer coisa à AOI IA..." aria-label="Sua mensagem"></textarea>
+          <button class="send" id="sendButton" type="submit" aria-label="Enviar mensagem">↑</button>
+        </form>
+        <div class="disclaimer">A AOI IA pode cometer erros. Confira informações importantes.</div>
+      </div>
+    </div>
+  </main>
+</div>
+
+<div class="overlay" id="settingsOverlay" role="dialog" aria-modal="true" aria-labelledby="settingsTitle">
+  <div class="modal">
+    <h2 id="settingsTitle">⚙ Configurações</h2>
+    <p class="modal-desc">Configure sua conexão com a API do Google Gemini.</p>
+    <div class="warning">
+      Segurança: a chave é guardada neste navegador. Não compartilhe o dispositivo com pessoas não confiáveis e não coloque a chave no código publicado. Uma página pública não consegue esconder uma chave usada no navegador.
+    </div>
+    <form id="settingsForm">
+      <div class="field">
+        <label for="apiKey">Chave da API Gemini</label>
+        <input id="apiKey" type="password" autocomplete="off" placeholder="Cole sua chave da API aqui">
+        <div class="field-help">Obtenha uma chave no Google AI Studio. Nunca compartilhe sua chave.</div>
+      </div>
+      <div class="field">
+        <label for="model">Modelo Gemini</label>
+        <select id="model">
+          <option value="gemini-2.5-flash">Gemini 2.5 Flash</option>
+          <option value="gemini-2.5-pro">Gemini 2.5 Pro</option>
+          <option value="gemini-2.0-flash">Gemini 2.0 Flash (se disponível para sua chave)</option>
+        </select>
+        <div class="field-help">Os modelos disponíveis podem mudar. Se ocorrer erro de modelo, escolha outro que esteja disponível para sua chave.</div>
+      </div>
+      <div class="field">
+        <label for="systemPrompt">Instruções da AOI IA</label>
+        <input id="systemPrompt" maxlength="1000" placeholder="Ex.: Seja útil e responda em português">
+      </div>
+      <div class="modal-buttons">
+        <button type="button" class="secondary" id="removeKey">Remover chave</button>
+        <button type="button" class="secondary" id="closeSettings">Cancelar</button>
+        <button type="submit" class="primary">Salvar</button>
+      </div>
+    </form>
   </div>
-</dialog>
-
-<dialog id="memoryDialog">
-  <div class="dialog-content">
-    <h2>Memória da AOI IA</h2>
-    <p class="note">
-      As informações ficam salvas neste navegador. Não guarde senhas,
-      documentos ou informações confidenciais.
-    </p>
-
-    <label>
-      <input type="checkbox" id="memoryEnabled" checked>
-      Ativar memória
-    </label>
-
-    <ul id="memoryList"></ul>
-
-    <input id="memoryInput" type="text" maxlength="200"
-      placeholder="Adicionar algo para lembrar">
-
-    <button type="button" id="addMemory">Adicionar memória</button>
-    <button type="button" id="deleteMemory">Apagar todas as memórias</button>
-    <button type="button" id="closeMemory">Fechar</button>
-  </div>
-</dialog>
-
-<script src="https://cdnjs.cloudflare.com/ajax/libs/marked/12.0.2/marked.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/dompurify/3.1.6/purify.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+</div>
 
 <script>
 "use strict";
 
-const $ = selector => document.querySelector(selector);
-
-const log = $("#log");
-const question = $("#question");
-const sendButton = $("#send");
-const statusBox = $("#status");
-
+const $ = id => document.getElementById(id);
 const STORAGE = {
-  history: "aoiia:history",
-  memory: "aoiia:memory",
-  memoryEnabled: "aoiia:memoryEnabled",
-  autoNews: "aoiia:autoNews"
+  key: "aoi_gemini_key",
+  model: "aoi_gemini_model",
+  instruction: "aoi_system_instruction",
+  conversations: "aoi_conversations",
+  current: "aoi_current_conversation"
 };
 
-function readJSON(key, fallback) {
-  try {
-    const value = localStorage.getItem(key);
-    return value ? JSON.parse(value) : fallback;
-  } catch {
-    return fallback;
-  }
-}
-
-function writeJSON(key, value) {
-  try {
-    localStorage.setItem(key, JSON.stringify(value));
-  } catch {
-    showStatus("Não foi possível salvar no armazenamento do navegador.");
-  }
-}
-
-let history = readJSON(STORAGE.history, []);
-let memories = readJSON(STORAGE.memory, []);
+let apiKey = localStorage.getItem(STORAGE.key) || "";
+let model = localStorage.getItem(STORAGE.model) || "gemini-2.5-flash";
+let systemInstruction = localStorage.getItem(STORAGE.instruction) ||
+  "Você é a AOI IA, um assistente útil, amigável e competente. Responda em português quando o usuário escrever em português. Seja claro, explique os passos e use blocos de código quando isso ajudar.";
+let conversations = loadConversations();
+let currentId = localStorage.getItem(STORAGE.current) || "";
 let busy = false;
 
-if (!Array.isArray(history)) history = [];
-if (!Array.isArray(memories)) memories = [];
-
-const SYSTEM_PROMPT = `
-Seu nome é AOI IA e você foi criada por AOIofc1.
-Responda em português do Brasil, salvo se pedirem outro idioma.
-Seja clara, útil, organizada e honesta. Não invente fatos ou fontes.
-
-Quando pedirem código:
-- Forneça o código completo.
-- Coloque cada arquivo em um bloco de código separado.
-- Informe o nome e o caminho sugerido do arquivo.
-- Para Roblox, diga se é Script, LocalScript ou ModuleScript.
-- Explique onde colocar o código e como testar.
-- Não diga que testou código se não o executou de verdade.
-
-Quando precisar de informações recentes, use a pesquisa na internet disponível
-no backend. Cite as fontes quando a ferramenta de pesquisa as fornecer.
-Se não houver dados suficientes, diga isso claramente.
-`;
-
-function showStatus(message) {
-  statusBox.textContent = message;
-  statusBox.style.display = message ? "block" : "none";
+function makeId() {
+  return Date.now().toString(36) + Math.random().toString(36).slice(2, 8);
 }
 
-function saveHistory() {
-  history = history.slice(-40);
-  writeJSON(STORAGE.history, history);
-}
-
-function getMemories() {
-  if ($("#memoryEnabled").checked === false) return [];
-  if (localStorage.getItem(STORAGE.memoryEnabled) === "0") return [];
-  return memories;
-}
-
-function addMemory(text) {
-  text = String(text).replace(/[<>]/g, "").trim().slice(0, 200);
-
-  if (text.length < 3) return false;
-
-  if (/senha|password|api[_ -]?key|sk-ant|token|cpf|cart[aã]o/i.test(text)) {
-    return false;
+function loadConversations() {
+  try {
+    const parsed = JSON.parse(localStorage.getItem(STORAGE.conversations) || "[]");
+    return Array.isArray(parsed) ? parsed : [];
+  } catch {
+    return [];
   }
+}
 
-  if (memories.some(item => item.toLowerCase() === text.toLowerCase())) {
-    return false;
+function saveConversations() {
+  try {
+    localStorage.setItem(STORAGE.conversations, JSON.stringify(conversations.slice(-40)));
+    localStorage.setItem(STORAGE.current, currentId);
+  } catch {
+    setStatus("O armazenamento do navegador está cheio. Tente limpar o histórico.");
   }
-
-  memories.push(text);
-  memories = memories.slice(-50);
-  writeJSON(STORAGE.memory, memories);
-  return true;
 }
 
-function buildSystemPrompt() {
-  const facts = getMemories();
-
-  if (!facts.length) return SYSTEM_PROMPT;
-
-  return SYSTEM_PROMPT +
-    "\n\nInformações que o usuário pediu para lembrar:\n" +
-    facts.map(item => "- " + item).join("\n") +
-    "\nUse essas informações somente quando forem relevantes.";
+function currentConversation() {
+  return conversations.find(c => c.id === currentId);
 }
 
-function calculate(text) {
-  const cleaned = text.trim()
-    .replace(/[=?\s]+$/, "")
-    .replace(/×/g, "*")
-    .replace(/÷/g, "/")
-    .replace(/\^/g, "**")
-    .replace(/,/g, ".");
+function newConversation() {
+  currentId = makeId();
+  conversations.push({
+    id: currentId,
+    title: "Nova conversa",
+    messages: [],
+    updatedAt: Date.now()
+  });
+  saveConversations();
+  renderConversation();
+  renderHistory();
+  $("prompt").focus();
+}
 
-  if (!/^[\d\s+\-*/().%]+$/.test(cleaned)) return null;
-  if (!/\d\s*[-+*/%]\s*[\d(]/.test(cleaned)) return null;
+function setStatus(text) {
+  $("status").textContent = text || "";
+}
+
+function openSettings() {
+  $("apiKey").value = apiKey;
+  $("model").value = model;
+  $("systemPrompt").value = systemInstruction;
+  $("settingsOverlay").classList.add("open");
+}
+
+function closeSettings() {
+  $("settingsOverlay").classList.remove("open");
+}
+
+$("settingsButton").addEventListener("click", openSettings);
+$("mobileSettings").addEventListener("click", openSettings);
+$("closeSettings").addEventListener("click", closeSettings);
+
+$("settingsOverlay").addEventListener("click", event => {
+  if (event.target === $("settingsOverlay")) closeSettings();
+});
+
+$("settingsForm").addEventListener("submit", event => {
+  event.preventDefault();
+  apiKey = $("apiKey").value.trim();
+  model = $("model").value;
+  systemInstruction = $("systemPrompt").value.trim() || systemInstruction;
 
   try {
-    const result = Function('"use strict"; return (' + cleaned + ')')();
-
-    if (typeof result !== "number" || !Number.isFinite(result)) return null;
-
-    return `${text} = **${result.toLocaleString("pt-BR")}**`;
+    if (apiKey) localStorage.setItem(STORAGE.key, apiKey);
+    else localStorage.removeItem(STORAGE.key);
+    localStorage.setItem(STORAGE.model, model);
+    localStorage.setItem(STORAGE.instruction, systemInstruction);
   } catch {
-    return null;
+    setStatus("Não foi possível salvar as configurações neste navegador.");
+  }
+
+  closeSettings();
+  setStatus(apiKey
+    ? "Configurações salvas. Você já pode enviar uma mensagem."
+    : "Cole sua chave da API nas configurações para começar.");
+});
+
+$("removeKey").addEventListener("click", () => {
+  apiKey = "";
+  localStorage.removeItem(STORAGE.key);
+  $("apiKey").value = "";
+  closeSettings();
+  setStatus("Chave removida deste navegador.");
+});
+
+$("newChat").addEventListener("click", newConversation);
+$("mobileNew").addEventListener("click", newConversation);
+
+$("clearHistory").addEventListener("click", () => {
+  if (!confirm("Deseja apagar todas as conversas salvas neste navegador?")) return;
+  conversations = [];
+  currentId = "";
+  saveConversations();
+  newConversation();
+  setStatus("Histórico apagado.");
+});
+
+function escapeHTML(value) {
+  return String(value).replace(/[&<>"']/g, char => ({
+    "&": "&amp;",
+    "<": "&lt;",
+    ">": "&gt;",
+    '"': "&quot;",
+    "'": "&#39;"
+  })[char]);
+}
+
+// Renderização simples e segura: não interpreta HTML recebido da IA.
+function formatText(text) {
+  const safe = escapeHTML(text);
+  const parts = safe.split(/```([\s\S]*?)```/g);
+  return parts.map((part, index) => {
+    if (index % 2 === 1) {
+      const lines = part.split("\n");
+      const language = lines[0].trim().slice(0, 40);
+      const code = lines.length > 1 ? lines.slice(1).join("\n") : part;
+      return `<pre><code>${code}</code></pre>`;
+    }
+    return part.replace(/`([^`\n]+)`/g, "<code>$1</code>")
+      .replace(/\*\*([^*]+)\*\*/g, "<strong>$1</strong>")
+      .replace(/\n/g, "<br>");
+  }).join("");
+}
+
+function renderConversation() {
+  const conversation = currentConversation();
+  const messages = conversation ? conversation.messages : [];
+  $("welcome").style.display = messages.length ? "none" : "block";
+  $("messages").innerHTML = "";
+
+  for (const message of messages) {
+    appendMessageElement(message.role, message.text, false);
   }
 }
 
-function parseCode(text) {
-  const files = [];
+function appendMessageElement(role, text, addToDOM = true) {
+  const wrapper = document.createElement("article");
+  wrapper.className = `message ${role === "model" ? "assistant" : "user"}`;
 
-  const prose = text.replace(
-    /```([\w+#.-]*)([^\n]*)\n([\s\S]*?)```/g,
-    (_, language, meta, source) => {
-      const titleMatch = /title=["']([^"']+)["']/.exec(meta);
-      files.push({
-        name: titleMatch ? titleMatch[1] : `codigo.${language || "txt"}`,
-        language: language || "text",
-        source: source.replace(/\n$/, "")
-      });
-      return "";
-    }
-  );
+  const avatar = document.createElement("div");
+  avatar.className = "avatar";
+  avatar.textContent = role === "model" ? "AI" : "VOCÊ";
 
-  return { prose, files };
-}
+  const body = document.createElement("div");
+  body.className = "message-body";
 
-function makeCodePanel(files) {
-  const box = document.createElement("section");
-  box.className = "codebox";
+  const name = document.createElement("div");
+  name.className = "message-name";
+  name.textContent = role === "model" ? "AOI IA" : "Você";
 
-  const bar = document.createElement("div");
-  bar.className = "codebar";
-
-  const filename = document.createElement("span");
-  const copy = document.createElement("button");
-  copy.textContent = "Copiar código";
-
-  const pre = document.createElement("pre");
-  const code = document.createElement("code");
-
-  pre.appendChild(code);
-  bar.append(filename, copy);
-  box.append(bar, pre);
-
-  let selected = files[0];
-
-  function display(file) {
-    selected = file;
-    filename.textContent = file.name;
-    code.textContent = file.source;
-    code.className = "";
-
-    if (window.hljs && hljs.getLanguage(file.language)) {
-      code.classList.add("language-" + file.language);
-      hljs.highlightElement(code);
-    }
-  }
-
-  if (files.length > 1) {
-    for (const file of files) {
-      const tab = document.createElement("button");
-      tab.textContent = file.name;
-      tab.onclick = () => display(file);
-      bar.insertBefore(tab, filename);
-    }
-  }
-
-  copy.onclick = async () => {
-    try {
-      await navigator.clipboard.writeText(selected.source);
-      copy.textContent = "Copiado!";
-    } catch {
-      copy.textContent = "Não foi possível copiar";
-    }
-
-    setTimeout(() => copy.textContent = "Copiar código", 1500);
-  };
-
-  display(selected);
-  return box;
-}
-
-function addMessage(message) {
-  const element = document.createElement("div");
-
-  if (message.role === "user") {
-    element.className = "msg user";
-    element.textContent = message.content;
-    log.appendChild(element);
-    return;
-  }
-
-  element.className = "msg bot";
-
-  const parsed = parseCode(message.content);
   const content = document.createElement("div");
+  content.className = "message-text";
+  content.innerHTML = formatText(text);
 
-  content.innerHTML = DOMPurify.sanitize(marked.parse(parsed.prose));
-  content.querySelectorAll("a").forEach(link => {
-    link.target = "_blank";
-    link.rel = "noopener noreferrer";
-  });
+  body.append(name, content);
 
-  element.appendChild(content);
-
-  if (parsed.files.length) {
-    element.appendChild(makeCodePanel(parsed.files));
-  }
-
-  if (Array.isArray(message.sources) && message.sources.length) {
-    const sources = document.createElement("div");
-    sources.className = "sources";
-    sources.textContent = "Fontes: ";
-
-    message.sources.forEach((source, index) => {
-      if (!/^https?:\/\//i.test(source.url || "")) return;
-
-      const link = document.createElement("a");
-      link.href = source.url;
-      link.target = "_blank";
-      link.rel = "noopener noreferrer";
-      link.textContent = source.title || source.url;
-
-      if (index) sources.append(" | ");
-      sources.appendChild(link);
+  if (role === "model") {
+    const tools = document.createElement("div");
+    tools.className = "message-tools";
+    const copy = document.createElement("button");
+    copy.className = "mini-button";
+    copy.textContent = "▢ Copiar resposta";
+    copy.addEventListener("click", async () => {
+      try {
+        await navigator.clipboard.writeText(text);
+        copy.textContent = "Copiado!";
+      } catch {
+        copy.textContent = "Não foi possível copiar";
+      }
     });
-
-    element.appendChild(sources);
+    tools.append(copy);
+    body.append(tools);
   }
 
-  log.appendChild(element);
+  wrapper.append(avatar, body);
+  if (addToDOM) $("messages").append(wrapper);
+  return wrapper;
 }
 
 function renderHistory() {
-  log.replaceChildren();
+  const list = $("historyList");
+  list.innerHTML = "";
 
-  if (!history.length) {
+  const sorted = [...conversations].sort((a, b) => b.updatedAt - a.updatedAt);
+
+  if (!sorted.length) {
     const empty = document.createElement("div");
-    empty.className = "empty";
-    empty.innerHTML =
-      "<strong>AOI IA</strong>" +
-      "Faça perguntas, pesquise informações e peça códigos completos.";
-    log.appendChild(empty);
+    empty.className = "empty-history";
+    empty.textContent = "Suas conversas aparecerão aqui.";
+    list.append(empty);
     return;
   }
 
-  history.forEach(addMessage);
-  log.scrollTop = log.scrollHeight;
+  for (const conversation of sorted.slice(0, 40)) {
+    const button = document.createElement("button");
+    button.className = "history-item";
+    button.textContent = conversation.title || "Nova conversa";
+    button.title = button.textContent;
+    button.style.background = conversation.id === currentId ? "#191920" : "transparent";
+    button.addEventListener("click", () => {
+      currentId = conversation.id;
+      saveConversations();
+      renderConversation();
+      renderHistory();
+    });
+    list.append(button);
+  }
 }
 
-function memoryCommand(text) {
-  const match = /^(?:lembre|lembra|anote|guarde)(?:\s+que|:)\s+(.+)$/i.exec(text.trim());
+async function askGemini(message, history) {
+  const endpoint =
+    `https://generativelanguage.googleapis.com/v1beta/models/${encodeURIComponent(model)}:generateContent`;
 
-  if (match) {
-    if (localStorage.getItem(STORAGE.memoryEnabled) === "0") {
-      return "A memória está desativada. Ative-a no menu Memória.";
-    }
+  const contents = history.map(item => ({
+    role: item.role,
+    parts: [{ text: item.text }]
+  }));
 
-    return addMemory(match[1])
-      ? "Memória salva: " + match[1]
-      : "Não consegui salvar. A informação pode estar repetida ou conter dados sensíveis.";
+  contents.push({
+    role: "user",
+    parts: [{ text: message }]
+  });
+
+  const response = await fetch(endpoint, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      "x-goog-api-key": apiKey
+    },
+    body: JSON.stringify({
+      systemInstruction: {
+        parts: [{ text: systemInstruction }]
+      },
+      contents,
+      generationConfig: {
+        temperature: 0.7,
+        maxOutputTokens: 4096
+      }
+    })
+  });
+
+  let data;
+  try {
+    data = await response.json();
+  } catch {
+    throw new Error("A API retornou uma resposta inválida.");
   }
 
-  if (/^(o que você lembra sobre mim|o que você sabe sobre mim|quem sou eu)\??$/i.test(text.trim())) {
-    return memories.length
-      ? "Estas são as informações salvas:\n\n" + memories.map(x => "- " + x).join("\n")
-      : "Ainda não tenho informações salvas sobre você.";
+  if (!response.ok) {
+    const apiError = data?.error?.message || "Erro na API Gemini.";
+    throw new Error(apiError);
   }
 
-  return null;
+  const answer = (data?.candidates?.[0]?.content?.parts || [])
+    .map(part => part.text || "")
+    .join("\n")
+    .trim();
+
+  if (!answer) {
+    const reason = data?.promptFeedback?.blockReason;
+    throw new Error(reason
+      ? `A solicitação foi bloqueada: ${reason}.`
+      : "O Gemini não retornou texto. Tente enviar outra mensagem.");
+  }
+
+  return answer;
 }
 
-async function askAI(text) {
+async function sendMessage(message) {
   if (busy) return;
-  busy = true;
-  sendButton.disabled = true;
-  showStatus("A AOI IA está pensando...");
+  if (!apiKey) {
+    openSettings();
+    setStatus("Primeiro, adicione sua chave da API Gemini nas configurações.");
+    return;
+  }
 
-  history.push({ role: "user", content: text });
-  saveHistory();
+  if (!currentConversation()) newConversation();
+
+  const conversation = currentConversation();
+  const history = conversation.messages
+    .filter(item => item && ["user", "model"].includes(item.role))
+    .slice(-20)
+    .map(item => ({ role: item.role, text: item.text }));
+
+  conversation.messages.push({ role: "user", text: message });
+  if (conversation.messages.length === 1) {
+    conversation.title = message.slice(0, 38) + (message.length > 38 ? "…" : "");
+  }
+  conversation.updatedAt = Date.now();
+  saveConversations();
+  renderConversation();
   renderHistory();
 
-  const fixedMemory = memoryCommand(text);
+  $("prompt").value = "";
+  resizeTextarea();
+  busy = true;
+  $("sendButton").disabled = true;
+  setStatus("AOI IA está pensando...");
 
-  if (fixedMemory !== null) {
-    history.push({ role: "assistant", content: fixedMemory });
-    saveHistory();
-    renderHistory();
-    busy = false;
-    sendButton.disabled = false;
-    showStatus("");
-    return;
-  }
-
-  const mathResult = calculate(text);
-
-  if (mathResult) {
-    history.push({ role: "assistant", content: mathResult });
-    saveHistory();
-    renderHistory();
-    busy = false;
-    sendButton.disabled = false;
-    showStatus("");
-    return;
-  }
+  const loading = appendMessageElement("model", "Pensando...");
+  loading.querySelector(".message-text").textContent = "Pensando...";
 
   try {
-    const messages = history.slice(-12).map(item => ({
-      role: item.role,
-      content: item.content
-    }));
-
-    const response = await fetch("/api/chat", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        system: buildSystemPrompt(),
-        messages
-      })
-    });
-
-    const data = await response.json().catch(() => ({}));
-
-    if (!response.ok) {
-      throw new Error(data.error || `Erro do servidor: ${response.status}`);
-    }
-
-    const answer = String(data.text || "Não recebi uma resposta.");
-    const sources = Array.isArray(data.sources) ? data.sources : [];
-
-    history.push({
-      role: "assistant",
-      content: answer,
-      sources
-    });
-
-    saveHistory();
+    const answer = await askGemini(message, history);
+    conversation.messages.push({ role: "model", text: answer });
+    conversation.updatedAt = Date.now();
+    saveConversations();
+    renderConversation();
     renderHistory();
-
+    setStatus("");
   } catch (error) {
-    const errorBox = document.createElement("div");
-    errorBox.className = "msg err";
-    errorBox.textContent =
-      "Erro: " + (error.message || "Não foi possível conectar à AOI IA.") +
-      " Confira se o backend está hospedado e configurado corretamente.";
+    conversation.messages.pop();
+    saveConversations();
+    renderConversation();
+    setStatus("Erro: " + error.message);
 
-    log.appendChild(errorBox);
-    log.scrollTop = log.scrollHeight;
-
+    if (/api key|api_key|key not valid|invalid api key/i.test(error.message)) {
+      setStatus("A chave parece inválida. Confira a chave nas configurações.");
+    } else if (/quota|rate limit|resource_exhausted/i.test(error.message)) {
+      setStatus("Limite da API atingido. Confira sua cota e tente mais tarde.");
+    } else if (error instanceof TypeError) {
+      setStatus("Falha de conexão. Confira sua internet e tente novamente.");
+    } else {
+      setStatus("Não foi possível responder: " + error.message);
+    }
   } finally {
     busy = false;
-    sendButton.disabled = false;
-    showStatus("");
-    question.focus();
+    $("sendButton").disabled = false;
+    $("prompt").focus();
   }
 }
 
-$("#form").addEventListener("submit", event => {
+$("chatForm").addEventListener("submit", event => {
   event.preventDefault();
-
-  const text = question.value.trim();
-  if (!text || busy) return;
-
-  question.value = "";
-  question.style.height = "auto";
-  askAI(text);
+  const message = $("prompt").value.trim();
+  if (message) sendMessage(message);
 });
 
-question.addEventListener("keydown", event => {
+function resizeTextarea() {
+  const textarea = $("prompt");
+  textarea.style.height = "auto";
+  textarea.style.height = Math.min(textarea.scrollHeight, 180) + "px";
+}
+
+$("prompt").addEventListener("input", resizeTextarea);
+$("prompt").addEventListener("keydown", event => {
   if (event.key === "Enter" && !event.shiftKey) {
     event.preventDefault();
-    $("#form").requestSubmit();
+    $("chatForm").requestSubmit();
   }
 });
 
-question.addEventListener("input", () => {
-  question.style.height = "auto";
-  question.style.height = question.scrollHeight + "px";
-});
-
-$("#newChat").onclick = () => {
-  history = [];
-  saveHistory();
-  renderHistory();
-};
-
-$("#clearHistory").onclick = () => {
-  if (!confirm("Deseja apagar todo o histórico deste navegador?")) return;
-
-  history = [];
-  saveHistory();
-  renderHistory();
-};
-
-$("#settings").onclick = () => {
-  $("#autoNews").checked = localStorage.getItem(STORAGE.autoNews) === "1";
-  $("#settingsDialog").showModal();
-};
-
-$("#closeSettings").onclick = () => $("#settingsDialog").close();
-
-$("#saveSettings").onclick = () => {
-  localStorage.setItem(
-    STORAGE.autoNews,
-    $("#autoNews").checked ? "1" : "0"
-  );
-
-  $("#settingsDialog").close();
-};
-
-function renderMemories() {
-  const list = $("#memoryList");
-  list.replaceChildren();
-
-  $("#memoryEnabled").checked =
-    localStorage.getItem(STORAGE.memoryEnabled) !== "0";
-
-  if (!memories.length) {
-    const item = document.createElement("li");
-    item.textContent = "Nenhuma memória salva.";
-    list.appendChild(item);
-    return;
-  }
-
-  memories.forEach((memory, index) => {
-    const item = document.createElement("li");
-    const text = document.createElement("span");
-    const remove = document.createElement("button");
-
-    text.textContent = memory;
-    remove.textContent = "Apagar";
-
-    remove.onclick = () => {
-      memories.splice(index, 1);
-      writeJSON(STORAGE.memory, memories);
-      renderMemories();
-    };
-
-    item.append(text, remove);
-    list.appendChild(item);
+document.querySelectorAll("[data-prompt]").forEach(button => {
+  button.addEventListener("click", () => {
+    $("prompt").value = button.dataset.prompt;
+    resizeTextarea();
+    $("prompt").focus();
   });
+});
+
+if (!currentConversation()) {
+  if (conversations.length) {
+    currentId = conversations.sort((a, b) => b.updatedAt - a.updatedAt)[0].id;
+  } else {
+    currentId = makeId();
+    conversations.push({
+      id: currentId,
+      title: "Nova conversa",
+      messages: [],
+      updatedAt: Date.now()
+    });
+  }
 }
 
-$("#memory").onclick = () => {
-  renderMemories();
-  $("#memoryDialog").showModal();
-};
-
-$("#closeMemory").onclick = () => $("#memoryDialog").close();
-
-$("#memoryEnabled").onchange = event => {
-  localStorage.setItem(
-    STORAGE.memoryEnabled,
-    event.target.checked ? "1" : "0"
-  );
-};
-
-$("#addMemory").onclick = () => {
-  const value = $("#memoryInput").value.trim();
-
-  if (addMemory(value)) {
-    $("#memoryInput").value = "";
-  } else {
-    alert("Não foi possível salvar. Confira se o texto é válido e não contém dados sensíveis.");
-  }
-
-  renderMemories();
-};
-
-$("#deleteMemory").onclick = () => {
-  if (!confirm("Apagar todas as memórias salvas?")) return;
-
-  memories = [];
-  writeJSON(STORAGE.memory, memories);
-  renderMemories();
-};
-
-$("#news").onclick = () => {
-  if (busy) return;
-
-  askAI(
-    "Pesquise as principais notícias atuais do Brasil e do mundo. " +
-    "Resuma os fatos, indique as datas e inclua fontes verificáveis. " +
-    "Não invente notícias nem links."
-  );
-};
-
+saveConversations();
+renderConversation();
 renderHistory();
+
+if (!apiKey) {
+  setStatus("Bem-vindo! Abra Configurações para adicionar sua chave Gemini.");
+}
 </script>
 </body>
 </html>
