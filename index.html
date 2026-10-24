@@ -106,7 +106,7 @@ select,.in{width:100%;padding:8px;background:#000;color:#fff;border:1px solid #4
 <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
 <script>
 const LIB_URL = "https://esm.run/@mlc-ai/web-llm@0.2.73";   // motor que roda o modelo no navegador
-const SYSTEM = "Você é a AOI IA, um assistente útil que responde em português do Brasil, a menos que peçam outro idioma.\n\nCÓDIGO: quando pedirem código, entregue o código COMPLETO. Cada arquivo vai em seu próprio bloco, com o caminho sugerido:\n```lua title=\"ServerScriptService/Teleport.server.lua\"\n...código...\n```\nUse sempre title=\"caminho/arquivo.ext\". Fora dos blocos, explique o que o código faz, o tipo (Script, LocalScript ou ModuleScript no Roblox), o local exato (ex.: ServerScriptService), objetos a criar com nomes exatos, como testar e erros comuns.\n\nMATEMÁTICA: mostre o raciocínio em etapas e revise as contas.\n\nINTERNET: você NÃO tem acesso à internet. Para informação recente, avise que não pode pesquisar e que pode estar desatualizada. Nunca invente fontes, links ou diga que pesquisou. Se não souber, diga que não sabe.\n\nERROS: explique a causa provável e mostre a versão corrigida.";
+const SYSTEM = "Seu nome é AOI IA e você foi criada por AOIofc1. Nunca diga outro nome nem outro criador, e nunca invente nomes de pessoas. Você é um assistente útil que responde em português do Brasil, a menos que peçam outro idioma.\n\nCÓDIGO: quando pedirem código, entregue o código COMPLETO. Cada arquivo vai em seu próprio bloco, com o caminho sugerido:\n```lua title=\"ServerScriptService/Teleport.server.lua\"\n...código...\n```\nUse sempre title=\"caminho/arquivo.ext\". Fora dos blocos, explique o que o código faz, o tipo (Script, LocalScript ou ModuleScript no Roblox), o local exato (ex.: ServerScriptService), objetos a criar com nomes exatos, como testar e erros comuns.\n\nMATEMÁTICA: mostre o raciocínio em etapas e revise as contas.\n\nINTERNET: você NÃO tem acesso à internet. Para informação recente, avise que não pode pesquisar e que pode estar desatualizada. Nunca invente fontes, links ou diga que pesquisou. Se não souber, diga que não sabe.\n\nERROS: explique a causa provável e mostre a versão corrigida.";
 const KEY = "robochat:v1", MODELK = "robochat:model", MAX_SAVED = 40, DEFAULT_MODEL = "Llama-3.2-1B-Instruct-q4f32_1-MLC";
 const $ = s => document.querySelector(s);
 const log = $("#log"), q = $("#q"), go = $("#go"), st = $("#st");
@@ -143,6 +143,13 @@ function showMem() {
 }
 const learnLocal = t => { const m = /^(?:lembre|lembra|anote|guarde)(?:\s+que|:)\s+(.+)$/i.exec(t.trim()); const s = memOn() && m ? addMem(m[1]) : ""; return s ? [s] : []; };
 
+// ===== Identidade: respostas fixas para "quem é você / quem te criou" =====
+const WHO = /(qual\s+(?:é\s+)?(?:o\s+)?seu\s+nome|como\s+(?:você\s+|vc\s+)?se\s+chama|quem\s+(?:é\s+)?(?:voc[êe]|vc)(?=\s|[?!.,]|$)|quem\s+(?:te|lhe)\s+(?:criou|fez|programou|desenvolveu)|quem\s+(?:é\s+)?(?:o\s+)?seu\s+(?:criador|dono|desenvolvedor)|quem\s+criou\s+(?:você|vc))/i;
+function whoami(t) {
+  if (t.length > 80 || !WHO.test(t)) return null;
+  const base = mode() === "key" ? "o Claude, da Anthropic" : "um modelo de IA aberto, que roda no seu aparelho";
+  return "Meu nome é **AOI IA** e fui criada por **AOIofc1**. Por baixo, uso " + base + ".";
+}
 // ===== Calculadora local: contas exatas, sem gastar o modelo =====
 function tryMath(t) {
   const fmt = n => Number.isFinite(n) ? n.toLocaleString("pt-BR", {maximumFractionDigits: 10}) : null;
@@ -279,6 +286,8 @@ async function send(text) {
   const learned = learnLocal(text);
   const calc = tryMath(text);
   if (calc) { msgs.push({role: "assistant", content: calc, note: "Calculado localmente, sem usar o modelo.", learned}); save(); render(); return; }
+  const who = whoami(text);
+  if (who) { msgs.push({role: "assistant", content: who, note: "Resposta fixa do site.", learned}); save(); render(); return; }
   const wait = add({role: "assistant", content: ""}); wait.className = "msg bot stream load"; wait.textContent = "Pensando…";
   go.disabled = true;
   try {
@@ -289,7 +298,7 @@ async function send(text) {
       if (!k) throw new Error("Abra Configurações e cole sua chave da Anthropic (ou volte para o modo local).");
       const r = await fetch("https://api.anthropic.com/v1/messages", {method: "POST",
         headers: {"x-api-key": k, "anthropic-version": "2023-06-01", "content-type": "application/json", "anthropic-dangerous-direct-browser-access": "true"},
-        body: JSON.stringify({model: MODEL_KEY, max_tokens: 4096, system: withMem(SYSTEM_WEB), messages: hist, tools: [{type: "web_search_20250305", name: "web_search"}]})});
+        body: JSON.stringify({model: MODEL_KEY, max_tokens: 4096, system: withMem(SYSTEM_WEB + "\n\nIDENTIDADE: você é a AOI IA, criada por AOIofc1, e roda sobre o Claude, da Anthropic. Se perguntarem quem você é, diga isso."), messages: hist, tools: [{type: "web_search_20250305", name: "web_search"}]})});
       const j = await r.json().catch(() => ({}));
       if (!r.ok) throw new Error(r.status === 401 ? "Chave da API inválida. Confira em Configurações." : (j.error && j.error.message) || "A IA respondeu com erro " + r.status + ".");
       const seen = new Set();
@@ -307,7 +316,7 @@ async function send(text) {
       wait.textContent = "Carregando o cérebro (só demora na primeira vez)…";
       const eng = await getEngine(t => { st.style.display = "block"; st.textContent = t; });
       st.style.display = "none"; wait.classList.remove("load"); wait.textContent = "";
-      const chunks = await eng.chat.completions.create({messages: [{role: "system", content: withMem(SYSTEM) + ctx}, ...hist], stream: true, temperature: 0.6, max_tokens: 1500});
+      const chunks = await eng.chat.completions.create({messages: [{role: "system", content: withMem(SYSTEM + "\n\nIDENTIDADE: você é a AOI IA, criada por AOIofc1, e roda sobre um modelo de IA aberto no aparelho do usuário. Se perguntarem quem você é, diga isso.") + ctx}, ...hist], stream: true, temperature: 0.6, max_tokens: 1500});
       for await (const c of chunks) { out += (c.choices[0] && c.choices[0].delta && c.choices[0].delta.content) || ""; wait.textContent = out; log.scrollTop = log.scrollHeight; }
     }
     msgs.push({role: "assistant", content: out || "Não consegui gerar uma resposta.", sources, learned}); save(); render();
