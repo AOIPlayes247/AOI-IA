@@ -3,177 +3,367 @@
 <html lang="pt-BR">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#09090d">
 <title>AOI IA</title>
-<meta name="theme-color" content="#0b0b0f">
+
 <style>
 :root {
   --bg:#09090d;
   --panel:#111117;
-  --panel2:#191920;
-  --border:#292932;
+  --panel2:#1a1a22;
+  --border:#2b2b35;
   --text:#f5f5f7;
-  --muted:#9b9ba8;
+  --muted:#a0a0ad;
   --red:#ff303b;
-  --red2:#bd1522;
 }
 * { box-sizing:border-box; }
 body {
   margin:0;
+  height:100dvh;
+  overflow:hidden;
   background:var(--bg);
   color:var(--text);
   font-family:Inter,system-ui,Arial,sans-serif;
-  height:100dvh;
-  overflow:hidden;
 }
 button,input,textarea,select { font:inherit; }
 button { cursor:pointer; }
+button:disabled { opacity:.5;cursor:not-allowed; }
+
 .app { display:flex;height:100dvh; }
+
 .sidebar {
-  width:270px;flex-shrink:0;background:#0e0e13;
+  width:265px;
+  flex-shrink:0;
+  background:#0e0e13;
   border-right:1px solid var(--border);
-  display:flex;flex-direction:column;padding:18px;gap:15px;
+  display:flex;
+  flex-direction:column;
+  gap:15px;
+  padding:18px;
 }
-.brand { display:flex;align-items:center;gap:11px;font-size:21px;font-weight:850; }
+.brand {
+  display:flex;
+  align-items:center;
+  gap:11px;
+  font-size:21px;
+  font-weight:850;
+}
 .logo {
-  width:42px;height:42px;border-radius:13px;
-  display:grid;place-items:center;
-  background:linear-gradient(135deg,var(--red),#8d0915);
-  box-shadow:0 0 22px #ff303b33;font-weight:950;
+  width:43px;height:43px;
+  border-radius:13px;
+  display:grid;
+  place-items:center;
+  background:linear-gradient(135deg,#ff4c55,#9c0915);
+  box-shadow:0 0 24px #ff303b30;
 }
-.brand small { display:block;color:var(--muted);font-size:11px;font-weight:500; }
+.brand small {
+  display:block;
+  color:var(--muted);
+  font-size:11px;
+  font-weight:500;
+}
 .new-chat,.side-button {
-  background:var(--panel2);border:1px solid var(--border);
-  border-radius:11px;color:var(--text);padding:12px;text-align:left;
+  background:var(--panel2);
+  border:1px solid var(--border);
+  border-radius:11px;
+  color:var(--text);
+  padding:12px;
+  text-align:left;
 }
 .new-chat:hover,.side-button:hover { border-color:var(--red); }
+
 .section-label {
-  font-size:11px;color:var(--muted);font-weight:800;
-  letter-spacing:1.2px;margin-top:7px;
+  font-size:11px;
+  color:var(--muted);
+  font-weight:800;
+  letter-spacing:1.2px;
 }
-.history { flex:1;overflow:auto;display:flex;flex-direction:column;gap:6px; }
+.history {
+  flex:1;
+  overflow-y:auto;
+  display:flex;
+  flex-direction:column;
+  gap:5px;
+}
 .history-item {
-  border:0;background:transparent;color:#c9c9d1;
-  padding:10px;border-radius:9px;text-align:left;
-  overflow:hidden;text-overflow:ellipsis;white-space:nowrap;
+  border:0;
+  background:transparent;
+  color:#d0d0d8;
+  padding:10px;
+  border-radius:9px;
+  text-align:left;
+  overflow:hidden;
+  text-overflow:ellipsis;
+  white-space:nowrap;
 }
 .history-item:hover { background:var(--panel2); }
 .sidebar-bottom { display:grid;gap:8px; }
-.main { flex:1;min-width:0;display:flex;flex-direction:column; }
+
+.main {
+  flex:1;
+  min-width:0;
+  display:flex;
+  flex-direction:column;
+}
 .topbar {
-  height:65px;border-bottom:1px solid var(--border);
-  display:flex;align-items:center;justify-content:space-between;
-  padding:0 22px;gap:12px;
+  min-height:64px;
+  border-bottom:1px solid var(--border);
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  padding:0 22px;
+  gap:10px;
 }
-.top-title { font-weight:750; }
-.top-actions { display:flex;gap:8px; }
-.icon-button {
-  border:1px solid var(--border);background:var(--panel);
-  color:var(--text);border-radius:10px;padding:9px 12px;
-}
-.icon-button:hover { border-color:var(--red); }
-.content { flex:1;overflow:auto;padding:25px 18px 15px; }
-.conversation { max-width:850px;margin:auto; }
-.welcome { text-align:center;padding:9vh 10px 25px; }
-.welcome-logo {
-  width:72px;height:72px;margin:0 auto 22px;border-radius:23px;
-  display:grid;place-items:center;font-size:28px;font-weight:950;
-  background:linear-gradient(135deg,var(--red),#8d0915);
-  box-shadow:0 0 45px #ff303b24;
-}
-h1 { font-size:clamp(28px,5vw,43px);margin:0 0 12px;letter-spacing:-1.5px; }
+.top-title { font-weight:800; }
 .gradient {
   color:#ff414b;
-  background:linear-gradient(90deg,#ff5b63,#ff1828);
-  -webkit-background-clip:text;background-clip:text;
+  background:linear-gradient(90deg,#ff656c,#ff1727);
+  -webkit-background-clip:text;
+  background-clip:text;
   -webkit-text-fill-color:transparent;
 }
-.subtitle { color:var(--muted);line-height:1.7; }
+.top-actions { display:flex;gap:8px; }
+.icon-button {
+  border:1px solid var(--border);
+  background:var(--panel);
+  color:var(--text);
+  border-radius:10px;
+  padding:9px 12px;
+}
+.icon-button:hover { border-color:var(--red); }
+
+.content {
+  flex:1;
+  overflow-y:auto;
+  padding:25px 18px 15px;
+}
+.conversation { max-width:850px;margin:auto; }
+.welcome {
+  text-align:center;
+  padding:8vh 10px 25px;
+}
+.welcome-logo {
+  width:72px;height:72px;
+  margin:0 auto 22px;
+  border-radius:23px;
+  display:grid;
+  place-items:center;
+  font-size:27px;
+  font-weight:950;
+  background:linear-gradient(135deg,#ff4c55,#990915);
+  box-shadow:0 0 45px #ff303b25;
+}
+h1 {
+  font-size:clamp(28px,5vw,43px);
+  margin:0 0 12px;
+  letter-spacing:-1.5px;
+}
+.subtitle {
+  color:var(--muted);
+  line-height:1.7;
+}
 .suggestions {
-  display:grid;grid-template-columns:repeat(2,minmax(0,1fr));
-  gap:10px;max-width:650px;margin:26px auto 0;
+  display:grid;
+  grid-template-columns:repeat(2,minmax(0,1fr));
+  gap:10px;
+  max-width:650px;
+  margin:26px auto 0;
 }
 .suggestion {
-  background:var(--panel);border:1px solid var(--border);
-  color:var(--text);border-radius:13px;padding:15px;text-align:left;
+  background:var(--panel);
+  border:1px solid var(--border);
+  color:var(--text);
+  border-radius:13px;
+  padding:15px;
+  text-align:left;
 }
-.suggestion:hover { border-color:var(--red);background:#171117; }
-.suggestion strong { display:block;margin-bottom:5px;font-size:14px; }
+.suggestion:hover { border-color:var(--red); }
+.suggestion strong {
+  display:block;
+  margin-bottom:5px;
+  font-size:14px;
+}
 .suggestion span { color:var(--muted);font-size:12px; }
-.message { display:flex;gap:12px;margin:25px 0;align-items:flex-start; }
-.avatar {
-  width:34px;height:34px;flex-shrink:0;border-radius:11px;
-  display:grid;place-items:center;font-weight:850;font-size:12px;
-  background:var(--panel2);border:1px solid var(--border);
+
+.message {
+  display:flex;
+  gap:12px;
+  margin:25px 0;
+  align-items:flex-start;
 }
-.message.assistant .avatar { background:var(--red2);border-color:#e52c38; }
-.message-body { min-width:0;flex:1;line-height:1.75;overflow-wrap:anywhere; }
-.message-name { font-size:12px;color:var(--muted);margin-bottom:6px;font-weight:750; }
-.message-text { white-space:pre-wrap; }
+.avatar {
+  width:35px;height:35px;
+  flex-shrink:0;
+  border-radius:11px;
+  display:grid;
+  place-items:center;
+  font-weight:850;
+  font-size:11px;
+  background:var(--panel2);
+  border:1px solid var(--border);
+}
+.message.assistant .avatar {
+  background:#a7101c;
+  border-color:#e52c38;
+}
+.message-body { min-width:0;flex:1;overflow-wrap:anywhere; }
+.message-name {
+  font-size:12px;
+  color:var(--muted);
+  margin-bottom:7px;
+  font-weight:750;
+}
+.message-text { line-height:1.8;white-space:pre-wrap; }
 .message-text pre {
-  background:#07070a;border:1px solid var(--border);border-radius:10px;
-  padding:14px;overflow:auto;white-space:pre;max-width:100%;
+  background:#07070a;
+  border:1px solid var(--border);
+  border-radius:10px;
+  padding:14px;
+  overflow:auto;
+  white-space:pre;
+  max-width:100%;
 }
 .message-text code { font-family:Consolas,monospace;font-size:13px; }
 .message-text p { margin:7px 0; }
 .message-tools { display:flex;gap:7px;margin-top:10px; }
 .mini-button {
-  background:transparent;color:var(--muted);
-  border:1px solid var(--border);border-radius:8px;padding:5px 9px;font-size:12px;
+  background:transparent;
+  color:var(--muted);
+  border:1px solid var(--border);
+  border-radius:8px;
+  padding:5px 9px;
+  font-size:12px;
 }
 .mini-button:hover { color:white;border-color:var(--red); }
+
 .composer-area { padding:12px 18px 18px; }
 .composer { max-width:850px;margin:auto; }
-.input-box {
-  display:flex;align-items:flex-end;gap:10px;
-  background:var(--panel);border:1px solid #363640;
-  border-radius:17px;padding:12px;
+.status {
+  color:var(--muted);
+  font-size:12px;
+  margin:5px 2px 10px;
+  line-height:1.6;
+  overflow-wrap:anywhere;
 }
-.input-box:focus-within { border-color:#a52a32;box-shadow:0 0 0 2px #ff303b12; }
+.status.error { color:#ff7b83; }
+.status.success { color:#85dda1; }
+
+.input-box {
+  display:flex;
+  align-items:flex-end;
+  gap:10px;
+  background:var(--panel);
+  border:1px solid #393943;
+  border-radius:17px;
+  padding:12px;
+}
+.input-box:focus-within {
+  border-color:#a52a32;
+  box-shadow:0 0 0 2px #ff303b12;
+}
 #prompt {
-  width:100%;resize:none;max-height:180px;min-height:28px;
-  border:0;outline:0;background:transparent;color:var(--text);
-  line-height:1.6;padding:3px;
+  width:100%;
+  resize:none;
+  max-height:180px;
+  min-height:28px;
+  border:0;
+  outline:0;
+  background:transparent;
+  color:var(--text);
+  line-height:1.6;
+  padding:3px;
 }
 #prompt::placeholder { color:#777783; }
 .send {
-  background:var(--red);color:white;border:0;border-radius:11px;
-  width:40px;height:40px;flex-shrink:0;font-size:18px;font-weight:800;
+  background:var(--red);
+  color:white;
+  border:0;
+  border-radius:11px;
+  width:40px;height:40px;
+  flex-shrink:0;
+  font-size:20px;
+  font-weight:800;
 }
-.send:disabled { opacity:.45;cursor:not-allowed; }
-.disclaimer { text-align:center;color:#777783;font-size:11px;margin-top:10px; }
-.status { color:var(--muted);font-size:12px;margin:8px 2px;min-height:18px; }
+.disclaimer {
+  text-align:center;
+  color:#777783;
+  font-size:11px;
+  margin-top:10px;
+}
+
 .overlay {
-  position:fixed;inset:0;background:#000b;display:none;
-  align-items:center;justify-content:center;padding:15px;z-index:5;
+  position:fixed;
+  inset:0;
+  background:#000c;
+  display:none;
+  align-items:center;
+  justify-content:center;
+  padding:15px;
+  z-index:10;
 }
 .overlay.open { display:flex; }
 .modal {
-  width:min(500px,100%);max-height:90dvh;overflow:auto;
-  background:var(--panel);border:1px solid var(--border);
-  border-radius:18px;padding:22px;
+  width:min(510px,100%);
+  max-height:90dvh;
+  overflow:auto;
+  background:var(--panel);
+  border:1px solid var(--border);
+  border-radius:18px;
+  padding:22px;
 }
 .modal h2 { margin:0 0 8px; }
-.modal-desc { color:var(--muted);font-size:13px;line-height:1.6;margin-bottom:20px; }
+.modal-desc {
+  color:var(--muted);
+  font-size:13px;
+  line-height:1.6;
+  margin-bottom:18px;
+}
 .field { display:grid;gap:7px;margin:16px 0; }
 .field label { font-size:13px;font-weight:750; }
 .field input,.field select {
-  width:100%;padding:12px;border:1px solid var(--border);
-  background:#09090d;color:var(--text);border-radius:10px;outline:none;
+  width:100%;
+  padding:12px;
+  border:1px solid var(--border);
+  background:#09090d;
+  color:var(--text);
+  border-radius:10px;
+  outline:none;
 }
 .field input:focus,.field select:focus { border-color:var(--red); }
-.field-help { font-size:11px;color:var(--muted);line-height:1.6; }
-.modal-buttons { display:flex;gap:9px;justify-content:flex-end;margin-top:20px; }
+.field-help {
+  font-size:11px;
+  color:var(--muted);
+  line-height:1.6;
+}
+.warning {
+  padding:12px;
+  border:1px solid #74502c;
+  background:#291d12;
+  color:#ffd3a1;
+  border-radius:10px;
+  font-size:12px;
+  line-height:1.6;
+}
+.modal-buttons {
+  display:flex;
+  gap:9px;
+  justify-content:flex-end;
+  flex-wrap:wrap;
+  margin-top:20px;
+}
 .primary,.secondary {
-  padding:10px 15px;border-radius:10px;font-weight:750;
+  padding:10px 15px;
+  border-radius:10px;
+  font-weight:750;
 }
 .primary { background:var(--red);border:0;color:white; }
-.secondary { background:var(--panel2);border:1px solid var(--border);color:white; }
-.warning {
-  padding:12px;border:1px solid #744b25;background:#291d12;
-  color:#ffd3a1;border-radius:10px;font-size:12px;line-height:1.6;
+.secondary {
+  background:var(--panel2);
+  border:1px solid var(--border);
+  color:white;
 }
-.empty-history { color:var(--muted);font-size:13px;padding:8px; }
+
 @media(max-width:700px) {
   .sidebar { display:none; }
   .topbar { padding:0 13px; }
@@ -185,22 +375,23 @@ h1 { font-size:clamp(28px,5vw,43px);margin:0 0 12px;letter-spacing:-1.5px; }
 }
 </style>
 </head>
+
 <body>
 <div class="app">
   <aside class="sidebar">
     <div class="brand">
-      <div class="logo">A</div>
+      <div class="logo">AOI</div>
       <div>AOI IA<small>Seu assistente inteligente</small></div>
     </div>
+
     <button class="new-chat" id="newChat">＋ Nova conversa</button>
     <div class="section-label">CONVERSAS RECENTES</div>
-    <div class="history" id="historyList">
-      <div class="empty-history">Suas conversas aparecerão aqui.</div>
-    </div>
+    <div class="history" id="historyList"></div>
+
     <div class="sidebar-bottom">
       <button class="side-button" id="settingsButton">⚙ Configurações</button>
       <button class="side-button" id="clearHistory">♲ Limpar histórico</button>
-      <div class="field-help">AOI IA · Projeto independente</div>
+      <div class="field-help">AOI IA · Powered by Gemini</div>
     </div>
   </aside>
 
@@ -214,23 +405,30 @@ h1 { font-size:clamp(28px,5vw,43px);margin:0 0 12px;letter-spacing:-1.5px; }
     </header>
 
     <section class="content" id="content">
-      <div class="conversation" id="conversation">
+      <div class="conversation">
         <div class="welcome" id="welcome">
           <div class="welcome-logo">AOI</div>
           <h1>Olá! Eu sou a <span class="gradient">AOI IA</span></h1>
-          <p class="subtitle">Seu espaço para criar, aprender, programar e transformar ideias em realidade.</p>
+          <p class="subtitle">
+            Seu espaço para criar, aprender, programar e transformar ideias em realidade.
+          </p>
+
           <div class="suggestions">
             <button class="suggestion" data-prompt="Crie um script para Roblox Studio e explique como instalar.">
-              <strong>🎮 Roblox Studio</strong><span>Crie scripts e sistemas para seus jogos.</span>
+              <strong>🎮 Roblox Studio</strong>
+              <span>Crie scripts para seus jogos.</span>
             </button>
             <button class="suggestion" data-prompt="Me ajude a criar um site moderno usando HTML, CSS e JavaScript.">
-              <strong>💻 Criar um site</strong><span>Transforme sua ideia em um projeto.</span>
+              <strong>💻 Criar um site</strong>
+              <span>Transforme sua ideia em um projeto.</span>
             </button>
             <button class="suggestion" data-prompt="Me ensine JavaScript do zero com exemplos simples.">
-              <strong>📚 Aprender programação</strong><span>Aprenda passo a passo.</span>
+              <strong>📚 Aprender programação</strong>
+              <span>Aprenda passo a passo.</span>
             </button>
             <button class="suggestion" data-prompt="Me dê ideias criativas para vídeos de games no YouTube.">
-              <strong>🎬 Ideias para vídeos</strong><span>Planeje seu próximo conteúdo.</span>
+              <strong>🎬 Ideias para vídeos</strong>
+              <span>Planeje seu próximo conteúdo.</span>
             </button>
           </div>
         </div>
@@ -240,43 +438,65 @@ h1 { font-size:clamp(28px,5vw,43px);margin:0 0 12px;letter-spacing:-1.5px; }
 
     <div class="composer-area">
       <div class="composer">
-        <div class="status" id="status" role="status"></div>
+        <div class="status" id="status" role="status" aria-live="polite"></div>
         <form id="chatForm" class="input-box">
-          <textarea id="prompt" rows="1" maxlength="12000" placeholder="Pergunte qualquer coisa à AOI IA..." aria-label="Sua mensagem"></textarea>
-          <button class="send" id="sendButton" type="submit" aria-label="Enviar mensagem">↑</button>
+          <textarea id="prompt" rows="1" maxlength="12000"
+            placeholder="Pergunte qualquer coisa à AOI IA..."
+            aria-label="Sua mensagem"></textarea>
+          <button class="send" id="sendButton" type="submit" aria-label="Enviar">↑</button>
         </form>
-        <div class="disclaimer">A AOI IA pode cometer erros. Confira informações importantes.</div>
+        <div class="disclaimer">
+          A AOI IA pode cometer erros. Confira informações importantes.
+        </div>
       </div>
     </div>
   </main>
 </div>
 
-<div class="overlay" id="settingsOverlay" role="dialog" aria-modal="true" aria-labelledby="settingsTitle">
+<div class="overlay" id="settingsOverlay" role="dialog"
+     aria-modal="true" aria-labelledby="settingsTitle">
   <div class="modal">
     <h2 id="settingsTitle">⚙ Configurações</h2>
-    <p class="modal-desc">Configure sua conexão com a API do Google Gemini.</p>
+    <p class="modal-desc">Configure sua conexão com o Google Gemini.</p>
+
     <div class="warning">
-      Segurança: a chave é guardada neste navegador. Não compartilhe o dispositivo com pessoas não confiáveis e não coloque a chave no código publicado. Uma página pública não consegue esconder uma chave usada no navegador.
+      A chave é guardada neste navegador. Como o site chama a API diretamente,
+      uma pessoa que inspecionar as requisições pode conseguir acessá-la.
+      Não use uma chave importante em um site público.
     </div>
+
     <form id="settingsForm">
       <div class="field">
         <label for="apiKey">Chave da API Gemini</label>
-        <input id="apiKey" type="password" autocomplete="off" placeholder="Cole sua chave da API aqui">
-        <div class="field-help">Obtenha uma chave no Google AI Studio. Nunca compartilhe sua chave.</div>
+        <input id="apiKey" type="password" autocomplete="off"
+               placeholder="Cole sua chave da API">
+        <div class="field-help">
+          Gere uma chave no
+          <a href="https://aistudio.google.com/app/apikey"
+             target="_blank" rel="noopener noreferrer"
+             style="color:#ff6971">Google AI Studio</a>.
+          Nunca compartilhe sua chave.
+        </div>
       </div>
+
       <div class="field">
         <label for="model">Modelo Gemini</label>
         <select id="model">
           <option value="gemini-2.5-flash">Gemini 2.5 Flash</option>
           <option value="gemini-2.5-pro">Gemini 2.5 Pro</option>
-          <option value="gemini-2.0-flash">Gemini 2.0 Flash (se disponível para sua chave)</option>
+          <option value="gemini-2.0-flash">Gemini 2.0 Flash (se disponível)</option>
         </select>
-        <div class="field-help">Os modelos disponíveis podem mudar. Se ocorrer erro de modelo, escolha outro que esteja disponível para sua chave.</div>
+        <div class="field-help">
+          A disponibilidade dos modelos depende da API e da sua conta.
+        </div>
       </div>
+
       <div class="field">
-        <label for="systemPrompt">Instruções da AOI IA</label>
-        <input id="systemPrompt" maxlength="1000" placeholder="Ex.: Seja útil e responda em português">
+        <label for="systemPrompt">Personalidade da AOI IA</label>
+        <input id="systemPrompt" maxlength="1000"
+               placeholder="Ex.: Seja útil e responda em português">
       </div>
+
       <div class="modal-buttons">
         <button type="button" class="secondary" id="removeKey">Remover chave</button>
         <button type="button" class="secondary" id="closeSettings">Cancelar</button>
@@ -290,6 +510,7 @@ h1 { font-size:clamp(28px,5vw,43px);margin:0 0 12px;letter-spacing:-1.5px; }
 "use strict";
 
 const $ = id => document.getElementById(id);
+
 const STORAGE = {
   key: "aoi_gemini_key",
   model: "aoi_gemini_model",
@@ -298,22 +519,31 @@ const STORAGE = {
   current: "aoi_current_conversation"
 };
 
+const DEFAULT_INSTRUCTION =
+  "Você é a AOI IA, um assistente útil, amigável e competente. " +
+  "Responda em português quando o usuário escrever em português. " +
+  "Explique as etapas com clareza e use blocos de código quando ajudar.";
+
 let apiKey = localStorage.getItem(STORAGE.key) || "";
 let model = localStorage.getItem(STORAGE.model) || "gemini-2.5-flash";
-let systemInstruction = localStorage.getItem(STORAGE.instruction) ||
-  "Você é a AOI IA, um assistente útil, amigável e competente. Responda em português quando o usuário escrever em português. Seja claro, explique os passos e use blocos de código quando isso ajudar.";
+let systemInstruction =
+  localStorage.getItem(STORAGE.instruction) || DEFAULT_INSTRUCTION;
+
 let conversations = loadConversations();
 let currentId = localStorage.getItem(STORAGE.current) || "";
 let busy = false;
 
 function makeId() {
-  return Date.now().toString(36) + Math.random().toString(36).slice(2, 8);
+  return Date.now().toString(36) +
+    Math.random().toString(36).slice(2, 8);
 }
 
 function loadConversations() {
   try {
-    const parsed = JSON.parse(localStorage.getItem(STORAGE.conversations) || "[]");
-    return Array.isArray(parsed) ? parsed : [];
+    const value = JSON.parse(
+      localStorage.getItem(STORAGE.conversations) || "[]"
+    );
+    return Array.isArray(value) ? value : [];
   } catch {
     return [];
   }
@@ -321,10 +551,17 @@ function loadConversations() {
 
 function saveConversations() {
   try {
-    localStorage.setItem(STORAGE.conversations, JSON.stringify(conversations.slice(-40)));
+    conversations = conversations.slice(-40);
+    localStorage.setItem(
+      STORAGE.conversations,
+      JSON.stringify(conversations)
+    );
     localStorage.setItem(STORAGE.current, currentId);
   } catch {
-    setStatus("O armazenamento do navegador está cheio. Tente limpar o histórico.");
+    setStatus(
+      "O armazenamento está cheio. Apague algumas conversas antigas.",
+      "error"
+    );
   }
 }
 
@@ -332,7 +569,15 @@ function currentConversation() {
   return conversations.find(c => c.id === currentId);
 }
 
+function setStatus(message, type = "") {
+  const element = $("status");
+  element.textContent = message || "";
+  element.className = "status" + (type ? " " + type : "");
+}
+
 function newConversation() {
+  if (busy) return;
+
   currentId = makeId();
   conversations.push({
     id: currentId,
@@ -340,14 +585,12 @@ function newConversation() {
     messages: [],
     updatedAt: Date.now()
   });
+
   saveConversations();
   renderConversation();
   renderHistory();
+  setStatus("");
   $("prompt").focus();
-}
-
-function setStatus(text) {
-  $("status").textContent = text || "";
 }
 
 function openSettings() {
@@ -371,43 +614,62 @@ $("settingsOverlay").addEventListener("click", event => {
 
 $("settingsForm").addEventListener("submit", event => {
   event.preventDefault();
+
   apiKey = $("apiKey").value.trim();
   model = $("model").value;
-  systemInstruction = $("systemPrompt").value.trim() || systemInstruction;
+  systemInstruction =
+    $("systemPrompt").value.trim() || DEFAULT_INSTRUCTION;
 
   try {
-    if (apiKey) localStorage.setItem(STORAGE.key, apiKey);
-    else localStorage.removeItem(STORAGE.key);
+    if (apiKey) {
+      localStorage.setItem(STORAGE.key, apiKey);
+    } else {
+      localStorage.removeItem(STORAGE.key);
+    }
+
     localStorage.setItem(STORAGE.model, model);
     localStorage.setItem(STORAGE.instruction, systemInstruction);
   } catch {
-    setStatus("Não foi possível salvar as configurações neste navegador.");
+    setStatus(
+      "Não foi possível salvar as configurações no navegador.",
+      "error"
+    );
   }
 
   closeSettings();
-  setStatus(apiKey
-    ? "Configurações salvas. Você já pode enviar uma mensagem."
-    : "Cole sua chave da API nas configurações para começar.");
+  setStatus(
+    apiKey
+      ? "Configurações salvas. Envie uma mensagem para testar."
+      : "Adicione sua chave Gemini nas configurações.",
+    apiKey ? "success" : "error"
+  );
 });
 
 $("removeKey").addEventListener("click", () => {
   apiKey = "";
-  localStorage.removeItem(STORAGE.key);
+  try {
+    localStorage.removeItem(STORAGE.key);
+  } catch {}
+
   $("apiKey").value = "";
   closeSettings();
-  setStatus("Chave removida deste navegador.");
+  setStatus("Chave removida deste navegador.", "success");
 });
 
 $("newChat").addEventListener("click", newConversation);
 $("mobileNew").addEventListener("click", newConversation);
 
 $("clearHistory").addEventListener("click", () => {
-  if (!confirm("Deseja apagar todas as conversas salvas neste navegador?")) return;
+  if (busy) return;
+
+  if (!confirm("Deseja apagar todas as conversas deste navegador?")) {
+    return;
+  }
+
   conversations = [];
   currentId = "";
-  saveConversations();
   newConversation();
-  setStatus("Histórico apagado.");
+  setStatus("Histórico apagado.", "success");
 });
 
 function escapeHTML(value) {
@@ -420,37 +682,33 @@ function escapeHTML(value) {
   })[char]);
 }
 
-// Renderização simples e segura: não interpreta HTML recebido da IA.
 function formatText(text) {
   const safe = escapeHTML(text);
   const parts = safe.split(/```([\s\S]*?)```/g);
+
   return parts.map((part, index) => {
     if (index % 2 === 1) {
       const lines = part.split("\n");
-      const language = lines[0].trim().slice(0, 40);
-      const code = lines.length > 1 ? lines.slice(1).join("\n") : part;
-      return `<pre><code>${code}</code></pre>`;
+      const firstLine = lines[0].trim();
+      const hasLanguage = /^[a-zA-Z0-9_+#.-]{1,30}$/.test(firstLine);
+      const code = hasLanguage && lines.length > 1
+        ? lines.slice(1).join("\n")
+        : part;
+
+      return "<pre><code>" + code + "</code></pre>";
     }
-    return part.replace(/`([^`\n]+)`/g, "<code>$1</code>")
+
+    return part
+      .replace(/`([^`\n]+)`/g, "<code>$1</code>")
       .replace(/\*\*([^*]+)\*\*/g, "<strong>$1</strong>")
       .replace(/\n/g, "<br>");
   }).join("");
 }
 
-function renderConversation() {
-  const conversation = currentConversation();
-  const messages = conversation ? conversation.messages : [];
-  $("welcome").style.display = messages.length ? "none" : "block";
-  $("messages").innerHTML = "";
-
-  for (const message of messages) {
-    appendMessageElement(message.role, message.text, false);
-  }
-}
-
-function appendMessageElement(role, text, addToDOM = true) {
+function appendMessageElement(role, text) {
   const wrapper = document.createElement("article");
-  wrapper.className = `message ${role === "model" ? "assistant" : "user"}`;
+  wrapper.className =
+    "message " + (role === "model" ? "assistant" : "user");
 
   const avatar = document.createElement("div");
   avatar.className = "avatar";
@@ -472,135 +730,232 @@ function appendMessageElement(role, text, addToDOM = true) {
   if (role === "model") {
     const tools = document.createElement("div");
     tools.className = "message-tools";
+
     const copy = document.createElement("button");
     copy.className = "mini-button";
     copy.textContent = "▢ Copiar resposta";
+
     copy.addEventListener("click", async () => {
       try {
         await navigator.clipboard.writeText(text);
         copy.textContent = "Copiado!";
       } catch {
-        copy.textContent = "Não foi possível copiar";
+        copy.textContent = "Cópia indisponível";
       }
     });
+
     tools.append(copy);
     body.append(tools);
   }
 
   wrapper.append(avatar, body);
-  if (addToDOM) $("messages").append(wrapper);
+  $("messages").append(wrapper);
   return wrapper;
+}
+
+function renderConversation() {
+  const conversation = currentConversation();
+  const messages = conversation ? conversation.messages : [];
+
+  $("welcome").style.display = messages.length ? "none" : "block";
+  $("messages").innerHTML = "";
+
+  for (const message of messages) {
+    appendMessageElement(message.role, message.text);
+  }
 }
 
 function renderHistory() {
   const list = $("historyList");
   list.innerHTML = "";
 
-  const sorted = [...conversations].sort((a, b) => b.updatedAt - a.updatedAt);
+  const sorted = [...conversations].sort(
+    (a, b) => b.updatedAt - a.updatedAt
+  );
 
   if (!sorted.length) {
     const empty = document.createElement("div");
-    empty.className = "empty-history";
+    empty.className = "field-help";
     empty.textContent = "Suas conversas aparecerão aqui.";
     list.append(empty);
     return;
   }
 
-  for (const conversation of sorted.slice(0, 40)) {
+  for (const conversation of sorted) {
     const button = document.createElement("button");
     button.className = "history-item";
     button.textContent = conversation.title || "Nova conversa";
     button.title = button.textContent;
-    button.style.background = conversation.id === currentId ? "#191920" : "transparent";
+
+    if (conversation.id === currentId) {
+      button.style.background = "#1a1a22";
+    }
+
     button.addEventListener("click", () => {
+      if (busy) return;
+
       currentId = conversation.id;
       saveConversations();
       renderConversation();
       renderHistory();
+      setStatus("");
     });
+
     list.append(button);
   }
 }
 
 async function askGemini(message, history) {
-  const endpoint =
-    `https://generativelanguage.googleapis.com/v1beta/models/${encodeURIComponent(model)}:generateContent`;
+  if (!apiKey) {
+    throw new Error(
+      "Chave da API ausente. Abra Configurações e adicione sua chave."
+    );
+  }
 
-  const contents = history.map(item => ({
-    role: item.role,
-    parts: [{ text: item.text }]
-  }));
+  const controller = new AbortController();
+  const timeout = setTimeout(() => controller.abort(), 30000);
 
-  contents.push({
-    role: "user",
-    parts: [{ text: message }]
-  });
-
-  const response = await fetch(endpoint, {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-      "x-goog-api-key": apiKey
-    },
-    body: JSON.stringify({
-      systemInstruction: {
-        parts: [{ text: systemInstruction }]
-      },
-      contents,
-      generationConfig: {
-        temperature: 0.7,
-        maxOutputTokens: 4096
-      }
-    })
-  });
-
-  let data;
   try {
-    data = await response.json();
-  } catch {
-    throw new Error("A API retornou uma resposta inválida.");
+    const endpoint =
+      "https://generativelanguage.googleapis.com/v1beta/models/" +
+      encodeURIComponent(model) + ":generateContent";
+
+    const contents = history.map(item => ({
+      role: item.role,
+      parts: [{ text: item.text }]
+    }));
+
+    contents.push({
+      role: "user",
+      parts: [{ text: message }]
+    });
+
+    const response = await fetch(endpoint, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "x-goog-api-key": apiKey
+      },
+      signal: controller.signal,
+      body: JSON.stringify({
+        systemInstruction: {
+          parts: [{ text: systemInstruction }]
+        },
+        contents,
+        generationConfig: {
+          temperature: 0.7,
+          maxOutputTokens: 2048
+        }
+      })
+    });
+
+    const data = await response.json().catch(() => ({}));
+
+    if (!response.ok) {
+      const details = data?.error?.message || "Erro desconhecido";
+      throw new Error("Gemini HTTP " + response.status + ": " + details);
+    }
+
+    const answer = (
+      data?.candidates?.[0]?.content?.parts || []
+    ).map(part => part.text || "").join("\n").trim();
+
+    if (!answer) {
+      const reason = data?.promptFeedback?.blockReason;
+
+      throw new Error(
+        reason
+          ? "Solicitação bloqueada pela API: " + reason
+          : "A API respondeu sem texto. Confira o modelo selecionado."
+      );
+    }
+
+    return answer;
+  } catch (error) {
+    if (error.name === "AbortError") {
+      throw new Error(
+        "Tempo esgotado após 30 segundos. Tente novamente."
+      );
+    }
+
+    if (error instanceof TypeError) {
+      throw new Error(
+        "Falha de conexão com o Gemini. Confira a internet e tente novamente."
+      );
+    }
+
+    throw error;
+  } finally {
+    clearTimeout(timeout);
+  }
+}
+
+function explainError(error) {
+  const message = error.message || "Erro desconhecido.";
+
+  if (/HTTP 400/i.test(message)) {
+    return "Erro 400: solicitação inválida. Confira o modelo e tente novamente. Detalhes: " + message;
   }
 
-  if (!response.ok) {
-    const apiError = data?.error?.message || "Erro na API Gemini.";
-    throw new Error(apiError);
+  if (/HTTP 401|HTTP 403/i.test(message)) {
+    return "A API recusou o acesso. Confira a chave, as permissões e a disponibilidade da API. Detalhes: " + message;
   }
 
-  const answer = (data?.candidates?.[0]?.content?.parts || [])
-    .map(part => part.text || "")
-    .join("\n")
-    .trim();
-
-  if (!answer) {
-    const reason = data?.promptFeedback?.blockReason;
-    throw new Error(reason
-      ? `A solicitação foi bloqueada: ${reason}.`
-      : "O Gemini não retornou texto. Tente enviar outra mensagem.");
+  if (/HTTP 404/i.test(message)) {
+    return "Modelo não encontrado ou indisponível para sua chave. Escolha outro modelo nas configurações. Detalhes: " + message;
   }
 
-  return answer;
+  if (/HTTP 429/i.test(message)) {
+    return "Limite de solicitações ou cota da API atingido. Verifique a cota no Google AI Studio. Detalhes: " + message;
+  }
+
+  if (/Tempo esgotado/i.test(message)) {
+    return message;
+  }
+
+  return message;
 }
 
 async function sendMessage(message) {
   if (busy) return;
+
   if (!apiKey) {
     openSettings();
-    setStatus("Primeiro, adicione sua chave da API Gemini nas configurações.");
+    setStatus("Adicione sua chave Gemini nas configurações.", "error");
     return;
   }
 
-  if (!currentConversation()) newConversation();
+  if (!currentConversation()) {
+    currentId = makeId();
+    conversations.push({
+      id: currentId,
+      title: "Nova conversa",
+      messages: [],
+      updatedAt: Date.now()
+    });
+  }
 
   const conversation = currentConversation();
+
   const history = conversation.messages
-    .filter(item => item && ["user", "model"].includes(item.role))
+    .filter(item =>
+      item &&
+      ["user", "model"].includes(item.role) &&
+      typeof item.text === "string"
+    )
     .slice(-20)
-    .map(item => ({ role: item.role, text: item.text }));
+    .map(item => ({
+      role: item.role,
+      text: item.text
+    }));
 
   conversation.messages.push({ role: "user", text: message });
+
   if (conversation.messages.length === 1) {
-    conversation.title = message.slice(0, 38) + (message.length > 38 ? "…" : "");
+    conversation.title =
+      message.slice(0, 38) + (message.length > 38 ? "…" : "");
   }
+
   conversation.updatedAt = Date.now();
   saveConversations();
   renderConversation();
@@ -608,45 +963,63 @@ async function sendMessage(message) {
 
   $("prompt").value = "";
   resizeTextarea();
+
   busy = true;
   $("sendButton").disabled = true;
-  setStatus("AOI IA está pensando...");
+  $("newChat").disabled = true;
+  $("mobileNew").disabled = true;
+  setStatus("A AOI IA está pensando...");
 
   const loading = appendMessageElement("model", "Pensando...");
-  loading.querySelector(".message-text").textContent = "Pensando...";
+  const startedAt = Date.now();
 
   try {
     const answer = await askGemini(message, history);
+
     conversation.messages.push({ role: "model", text: answer });
     conversation.updatedAt = Date.now();
     saveConversations();
     renderConversation();
     renderHistory();
-    setStatus("");
+    setStatus("Resposta recebida.", "success");
+
+    setTimeout(() => {
+      if (!busy) setStatus("");
+    }, 2500);
   } catch (error) {
-    conversation.messages.pop();
+    console.error("Erro AOI IA:", error);
+
+    // Remove a mensagem de carregamento.
+    loading.remove();
+
+    // Remove a pergunta que falhou para não duplicá-la no histórico.
+    const last = conversation.messages[conversation.messages.length - 1];
+    if (last && last.role === "user" && last.text === message) {
+      conversation.messages.pop();
+    }
+
     saveConversations();
     renderConversation();
-    setStatus("Erro: " + error.message);
+    renderHistory();
 
-    if (/api key|api_key|key not valid|invalid api key/i.test(error.message)) {
-      setStatus("A chave parece inválida. Confira a chave nas configurações.");
-    } else if (/quota|rate limit|resource_exhausted/i.test(error.message)) {
-      setStatus("Limite da API atingido. Confira sua cota e tente mais tarde.");
-    } else if (error instanceof TypeError) {
-      setStatus("Falha de conexão. Confira sua internet e tente novamente.");
-    } else {
-      setStatus("Não foi possível responder: " + error.message);
-    }
+    setStatus("Erro: " + explainError(error), "error");
   } finally {
     busy = false;
     $("sendButton").disabled = false;
+    $("newChat").disabled = false;
+    $("mobileNew").disabled = false;
     $("prompt").focus();
+
+    // Proteção extra para que o estado de carregamento não fique preso.
+    if (Date.now() - startedAt > 30000 && $("status").textContent.includes("pensando")) {
+      setStatus("Tempo esgotado. Tente novamente.", "error");
+    }
   }
 }
 
 $("chatForm").addEventListener("submit", event => {
   event.preventDefault();
+
   const message = $("prompt").value.trim();
   if (message) sendMessage(message);
 });
@@ -654,10 +1027,12 @@ $("chatForm").addEventListener("submit", event => {
 function resizeTextarea() {
   const textarea = $("prompt");
   textarea.style.height = "auto";
-  textarea.style.height = Math.min(textarea.scrollHeight, 180) + "px";
+  textarea.style.height =
+    Math.min(textarea.scrollHeight, 180) + "px";
 }
 
 $("prompt").addEventListener("input", resizeTextarea);
+
 $("prompt").addEventListener("keydown", event => {
   if (event.key === "Enter" && !event.shiftKey) {
     event.preventDefault();
@@ -673,9 +1048,14 @@ document.querySelectorAll("[data-prompt]").forEach(button => {
   });
 });
 
+// Restaura a conversa mais recente ao abrir o site.
 if (!currentConversation()) {
-  if (conversations.length) {
-    currentId = conversations.sort((a, b) => b.updatedAt - a.updatedAt)[0].id;
+  const latest = [...conversations].sort(
+    (a, b) => b.updatedAt - a.updatedAt
+  )[0];
+
+  if (latest) {
+    currentId = latest.id;
   } else {
     currentId = makeId();
     conversations.push({
@@ -692,7 +1072,9 @@ renderConversation();
 renderHistory();
 
 if (!apiKey) {
-  setStatus("Bem-vindo! Abra Configurações para adicionar sua chave Gemini.");
+  setStatus(
+    "Bem-vindo! Abra Configurações e adicione sua chave Gemini."
+  );
 }
 </script>
 </body>
